@@ -51,7 +51,7 @@ _ _ _
 * **StepMotor**：步进电机驱动，基于GPIO进行控制
 * **MPU6050**：6轴惯导驱动，包括了角速度、加速度的读取
 * **RemoteControl**:RC遥控器驱动，包含了PWM输入捕获和PPM输入捕获，包括了中断方式和定时器输入捕获方式
-* **~~Ultrasonic~~**~~~~ ~~：超声波驱动，包括了systick版本和定时器版本~~
+* **~~Ultrasonic~~** ~~：超声波驱动，包括了systick版本和定时器版本~~
 
 ## 代码风格
 看[这里](https://github.com/neutree/simple-code-conventions)
