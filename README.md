@@ -1,13 +1,9 @@
-#STM32f103 Peripherals Driver Lib
-#And some common module driver
-#And come common math lib
+# STM32f103 Peripherals Driver Lib
+
 
 _ _ _
 _ _ _
 
-
-> ## [STM32f103 peripherals
-_ _ _
 
 # 规范
 ## 目录规范
@@ -32,6 +28,30 @@ _ _ _
 
 `tool`:工具，如删除工程中间文件批处理文件
 
+# 驱动简介
+
+## 片上外设驱动
+* **Interrupt**：片上外设中断管理，所有的中断相关的逻辑都在这里
+* **GPIO**：通用IO驱动，包括基本IO配置与设置引脚和读取引脚状态
+* **USART**：串口驱动，包括了串口1到串口4的驱动，发送可使用DMA，接收使用中断方式，每个串口使用单独的FIFO
+* **ADC**：ADC驱动
+* **I2C**：I2C驱动，包含了中断方式和DMA方式
+* **PWM**：PWM驱动
+* **Timer**：定时器驱动
+* **TaskManager**：使用systick作为时基，可用来获取系统时间戳、延时（包含软件延时）和定时调用函数
+* **Capture**：输入捕获，包括了定时器捕获和外部中断捕获
+* **Flash**：STM32内部Flash相关操作，包括对Flash的读写
+
+
+## 片外模块驱动
+* **LED**：基于GPIO和PWM对LED的相关操作，包括开、关、闪烁等
+* **esp8266**：esp8266是串口WIFI模块，基于USART对esp8266的相关操作，其中包括了驱动文件（esp8266.cpp）和应用层文件(SockeEsp8266.cpp),应用层文件是使用socket的接口进行通信的实现
+* **GPS**：使用USART对GPS模块的驱动
+* **HMC5883L**：磁力计，基于I2C通信的HMC5883L的驱动
+* **StepMotor**：步进电机驱动，基于GPIO进行控制
+* **MPU6050**：6轴惯导驱动，包括了角速度、加速度的读取
+* **RemoteControl**:RC遥控器驱动，包含了PWM输入捕获和PPM输入捕获，包括了中断方式和定时器输入捕获方式
+* **~~Ultrasonic~~** ~~：超声波驱动，包括了systick版本和定时器版本~~
 
 ## 代码风格
 看[这里](https://github.com/neutree/simple-code-conventions)

@@ -4,10 +4,10 @@ mode con cols=100 lines=30
 
 
 COLOR  3F
-
+cd ..
 
 del JLinkLog.txt /s
-:: del JLinkSettings.ini /s  don't delete jlink configuration file
+del JLinkSettings.ini /s  don't delete jlink configuration file
 del *.guild_log.htm /s
 del *.uvguix.* /s
 del *_uvoptx.bak /s
