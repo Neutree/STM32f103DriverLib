@@ -145,7 +145,9 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			dmaTcFlagChannel=DMA1_FLAG_TC4;
 			dmaGlFlagChannel=DMA1_IT_GL4;
 		}
+		#ifdef USE_USART1
 		pUSART1 = this;
+		#endif
 		if(remap==0x01)
 		{
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
@@ -178,7 +180,9 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			dmaTcFlagChannel=DMA1_FLAG_TC7;
 			dmaGlFlagChannel=DMA1_IT_GL7;
 		}
+		#ifdef USE_USART2
 		pUSART2 = this;
+		#endif
 		if(remap==0x01)
 		{
 			//CLOCK
@@ -210,7 +214,9 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			dmaTcFlagChannel=DMA1_FLAG_TC2;
 			dmaGlFlagChannel=DMA1_IT_GL2;
 		}
+		#ifdef USE_USART3
 		pUSART3 = this;
+		#endif
 		if(remap==0x01)
 		{
 			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
@@ -447,11 +453,23 @@ uint32_t USART::GetBaudRate()
 USART::~USART()
 {
 	if(USART1==usart)
-		pUSART1 = 0;
+	{
+		#ifdef USE_USART1
+			pUSART1 = 0;
+		#endif
+	}
 	else if(USART2==usart)
-		pUSART2 = 0;
+	{
+		#ifdef USE_USART2
+			pUSART2 = 0;
+		#endif
+	}
 	else if(USART3==usart)
-		pUSART3 = 0;
+	{
+		#ifdef USE_USART3
+			pUSART3 = 0;
+		#endif
+	}
 }
 
 ///////////////////////////

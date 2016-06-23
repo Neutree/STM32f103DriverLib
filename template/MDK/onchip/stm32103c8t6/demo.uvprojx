@@ -14,7 +14,7 @@
         <TargetCommonOption>
           <Device>STM32F103C8</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F1xx_DFP.2.0.0</PackID>
+          <PackID>Keil.STM32F1xx_DFP.2.1.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IROM(0x08000000,0x10000) IRAM(0x20000000,0x5000) CPUTYPE("Cortex-M3") CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -84,8 +84,6 @@
             <UserProg2Name></UserProg2Name>
             <UserProg1Dos16Mode>0</UserProg1Dos16Mode>
             <UserProg2Dos16Mode>0</UserProg2Dos16Mode>
-            <nStopA1X>0</nStopA1X>
-            <nStopA2X>0</nStopA2X>
           </AfterMake>
           <SelectedForBatchBuild>0</SelectedForBatchBuild>
           <SVCSIdString></SVCSIdString>
@@ -229,7 +227,6 @@
             <useUlib>0</useUlib>
             <EndSel>0</EndSel>
             <uLtcg>0</uLtcg>
-            <nSecure>0</nSecure>
             <RoSelD>3</RoSelD>
             <RwSelD>3</RwSelD>
             <CodeSel>0</CodeSel>
@@ -296,17 +293,17 @@
                 <Size>0x0</Size>
               </XRAM>
               <OCR_RVCT1>
-                <Type>0</Type>
+                <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </OCR_RVCT1>
               <OCR_RVCT2>
-                <Type>0</Type>
+                <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </OCR_RVCT2>
               <OCR_RVCT3>
-                <Type>0</Type>
+                <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </OCR_RVCT3>
@@ -316,7 +313,7 @@
                 <Size>0x10000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
-                <Type>0</Type>
+                <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </OCR_RVCT5>
@@ -364,15 +361,11 @@
             <uSurpInc>0</uSurpInc>
             <uC99>0</uC99>
             <useXO>0</useXO>
-            <v6Lang>0</v6Lang>
-            <v6LangP>0</v6LangP>
-            <vShortEn>0</vShortEn>
-            <vShortWch>0</vShortWch>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>..\..\..\..\lib\math;..\..\..\..\lib\onchip\ADC;..\..\..\..\lib\onchip\capture;..\..\..\..\lib\onchip\delay;..\..\..\..\lib\onchip\EXTI;..\..\..\..\lib\onchip\flash;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\onchip\I2C;..\..\..\..\lib\onchip\interrupt;..\..\..\..\lib\onchip\PWM;..\..\..\..\lib\onchip\taskManager;..\..\..\..\lib\onchip\timer;..\..\..\..\lib\onchip\USART;.\app</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -414,12 +407,88 @@
       <Groups>
         <Group>
           <GroupName>lib/onchip</GroupName>
-        </Group>
-        <Group>
-          <GroupName>system</GroupName>
+          <Files>
+            <File>
+              <FileName>ADC.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\ADC\ADC.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>InputCapture_EXIT.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\capture\InputCapture_EXIT.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>InputCapture_TIM.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\capture\InputCapture_TIM.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Delay.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\delay\Delay.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Flash.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\flash\Flash.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>GPIO.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\GPIO\GPIO.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>I2C.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\I2C\I2C.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>PWM.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\PWM\PWM.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\timer\Timer.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USART.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\USART\USART.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Interrupt.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\interrupt\Interrupt.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TaskManager.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\taskManager\TaskManager.cpp</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>app</GroupName>
+          <Files>
+            <File>
+              <FileName>Main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\app\Main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Configuration.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\app\Configuration.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserInterrupt.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\app\UserInterrupt.cpp</FilePath>
+            </File>
+          </Files>
         </Group>
         <Group>
           <GroupName>::CMSIS</GroupName>
