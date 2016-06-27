@@ -3,6 +3,23 @@
 
 #include "stm32f10x.h"
 
+
+/**
+ *
+ *                        ADC端口 和 STM32f103c8t6板子的对应引脚
+ *                      （stm32f10x系列板若有以下引脚也可兼容使用）
+ *                          PA0---ADC12_IN0   PB0---ADC12_IN8
+ *                          PA1---ADC12_IN1   PB1---ADC12_IN9
+ *                          PA2---ADC12_IN2   PC0---ADC12_IN10
+ *                          PA3---ADC12_IN3   PC1---ADC12_IN11
+ *                          PA4---ADC12_IN4   PC2---ADC12_IN12
+ *                          PA5---ADC12_IN5   PC3---ADC12_IN13
+ *                          PA6---ADC12_IN6   PC4---ADC12_IN14
+ *                          PA7---ADC12_IN7   PC5---ADC12_IN15
+ *
+ */
+
+
 #define MAX_ADC_CHANNEL 10
 
 class ADC

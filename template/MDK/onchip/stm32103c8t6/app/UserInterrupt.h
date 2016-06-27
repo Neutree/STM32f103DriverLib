@@ -1,5 +1,6 @@
 #ifndef __USERINTERRUPT_H
 #define __USERINTERRUPT_H
+#include "Configuration.h"
 
 
 /*TIM***************************************************************************/
