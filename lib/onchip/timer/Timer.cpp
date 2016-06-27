@@ -2,6 +2,8 @@
 
 Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Prioritygroup,u8 preemprionPriority,u8 subPriority)
 {
+	#ifdef USE_TIMER
+	
 
 	//通过计算的出了ARR PSC
 	uint8_t timerIrqChannel;
@@ -9,27 +11,43 @@ Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Pr
 	mTempTimer=timer;
 	NVIC_InitTypeDef NVIC_InitStructure;
     Conversion(second,millisecond,microsecond);
-	
+	#ifndef USE_TIMER1
+	#ifndef USE_TIMER2
+	#ifndef USE_TIMER3
+	#ifndef USE_TIMER4
+		return ;
+	#endif
+	#endif
+	#endif
+	#endif
 	if(timer==TIM1)
 	{
+		#ifdef USE_TIMER1
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 		timerIrqChannel=TIM1_UP_IRQn;
+		#endif
 		
 	}
 	else if(timer==TIM2)
 	{
+		#ifdef USE_TIMER2
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 		timerIrqChannel=TIM2_IRQn;
+		#endif
 	}
 	else if(timer==TIM3)
 	{
+		#ifdef USE_TIMER3
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 		timerIrqChannel=TIM3_IRQn;
+		#endif
 	}
 	else if(timer==TIM4)
 	{
+		#ifdef USE_TIMER4
 		RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 		timerIrqChannel=TIM4_IRQn;
+		#endif
 	}
 	else
 	{
@@ -72,6 +90,7 @@ Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Pr
 		NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
 	TIM_Cmd(mTempTimer, ENABLE);//开启定时器
 	/**/
+	#endif
 }
 
 void Timer::Start()

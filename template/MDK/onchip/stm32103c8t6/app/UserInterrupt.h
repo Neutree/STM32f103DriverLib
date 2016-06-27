@@ -4,7 +4,7 @@
 
 /*TIM***************************************************************************/
 #ifdef USE_TIMER1
- void Timer1_IRQ();
+void Timer1_IRQ();
 #endif
 
 #ifdef USE_TIMER2

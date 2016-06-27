@@ -37,7 +37,7 @@ int main()
 			ledRed.Toggle();
 //			ledBlue.Toggle();
 		}
-		ledBlue.Blink(0,0.2,false);
+		ledBlue.Blink(0,0.5,false);
 	}
 	
 }
