@@ -123,6 +123,21 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 				,uint16_t parity,uint16_t wordLength, uint16_t stopBits)
 	:isBusySend(0),mUseDma(useDMA),mPrecision(3)
 {	
+	#ifdef USE_USART
+	#ifndef USE_USART1
+	#ifndef USE_USART2
+	#ifndef USE_USART3
+	#ifdef STM32F10X_HD//大容量
+	#ifndef USE_USART4//一个串口都没用
+		return;
+	#endif
+	#ifdef STM32F10X_MD//中容量，一个串口都没用
+		return;
+	#endif
+	#endif
+	#endif
+	#endif
+	#endif
 	////////////////////////////
 	//add by jason
 	uint16_t txPin = 0, rxPin = 0;
@@ -136,6 +151,7 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 	
 	if(USART==1)
 	{
+		#ifdef USE_USART1
 		usart=USART1;
 		usartIrqChannel=USART1_IRQn;
 		if(mUseDma)
@@ -145,9 +161,7 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			dmaTcFlagChannel=DMA1_FLAG_TC4;
 			dmaGlFlagChannel=DMA1_IT_GL4;
 		}
-		#ifdef USE_USART1
 		pUSART1 = this;
-		#endif
 		if(remap==0x01)
 		{
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
@@ -168,9 +182,11 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			
 			USART_GPIO=GPIOA;
 		}
+		#endif
 	}
 	else if(USART==2)
 	{
+		#ifdef USE_USART2
 		usart=USART2;
 		usartIrqChannel=USART2_IRQn;
 		if(mUseDma)
@@ -180,9 +196,7 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			dmaTcFlagChannel=DMA1_FLAG_TC7;
 			dmaGlFlagChannel=DMA1_IT_GL7;
 		}
-		#ifdef USE_USART2
 		pUSART2 = this;
-		#endif
 		if(remap==0x01)
 		{
 			//CLOCK
@@ -202,9 +216,11 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			
 			USART_GPIO=GPIOA;
 		}
+		#endif
 	}
 	else if(USART==3)
 	{
+		#ifdef USE_USART3
 		usart=USART3;
 		usartIrqChannel=USART3_IRQn;
 		if(mUseDma)
@@ -214,9 +230,7 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			dmaTcFlagChannel=DMA1_FLAG_TC2;
 			dmaGlFlagChannel=DMA1_IT_GL2;
 		}
-		#ifdef USE_USART3
 		pUSART3 = this;
-		#endif
 		if(remap==0x01)
 		{
 			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
@@ -246,7 +260,37 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 			
 			USART_GPIO=GPIOB;
 		}
+		#endif
 	}
+	
+	else if(USART==4)
+	{
+		#ifdef STM32F10X_HD
+		#ifdef USE_USART4
+		usart=UART4;
+		usartIrqChannel=UART4_IRQn;
+		if(mUseDma)
+		{
+			dmaChannelTx=DMA2_Channel5;
+			dmaIrqChannel=DMA2_Channel4_5_IRQn;
+			dmaTcFlagChannel=DMA2_FLAG_TC5;
+			dmaGlFlagChannel=DMA2_IT_GL5;
+		}
+		pUART4 = this;
+		RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
+		
+		txPin = 10;
+		rxPin = 11;
+		
+		USART_GPIO=GPIOC;
+		#endif
+		#endif
+		#ifndef STM32F10X_HD
+		assert_param(false);
+		return ;
+		#endif
+	}
+	
 
 	//add by jason
 	GPIO tx(USART_GPIO,txPin,GPIO_Mode_AF_PP,GPIO_Speed_10MHz);	
@@ -277,8 +321,11 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 		DMA_InitTypeDef DMA_InitStructure;
 
 		/*开启DMA时钟*/
-		RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
-
+		
+		if(USART>3)
+			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);
+		else
+			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
 		//设置DMA源：串口数据寄存器地址
 		DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&usart->DR;	   
 
@@ -379,6 +426,7 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 		/* Enable DMA TX Channel HTIT  */
 		/*DMA1_Channel4->CCR &= ~DMA_IT_HT;//关闭发送一般产生中断*/
 	}
+	#endif
 }
 
 void USART::SetBaudRate(uint32_t baudRate)
@@ -452,24 +500,12 @@ uint32_t USART::GetBaudRate()
 ///////////////////////////
 USART::~USART()
 {
-	if(USART1==usart)
-	{
-		#ifdef USE_USART1
-			pUSART1 = 0;
-		#endif
-	}
-	else if(USART2==usart)
-	{
-		#ifdef USE_USART2
-			pUSART2 = 0;
-		#endif
-	}
-	else if(USART3==usart)
-	{
-		#ifdef USE_USART3
-			pUSART3 = 0;
-		#endif
-	}
+//	if(USART1==usart)
+//		pUSART1 = 0;
+//	else if(USART2==usart)
+//		pUSART2 = 0;
+//	else if(USART3==usart)
+//		pUSART3 = 0;
 }
 
 ///////////////////////////

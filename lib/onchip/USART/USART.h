@@ -7,6 +7,7 @@
 *       然后根据需要配置USART.h中开头的配置部分（缓冲区大小配置）
 *       中断均由Interrupt.cpp中管理，若需要自定义，请自行编辑中断函数
 *       然后定义对象初始化，既可以使用
+*@attention MD容量的片子只能使用USART1、2、3，HD可以使用4，如果MD使用了4，程序会进入Interrupt.CPP中的assert_failed()函数中
 *@copyright CQUTIOTLIB all right reserved
 *
 */
