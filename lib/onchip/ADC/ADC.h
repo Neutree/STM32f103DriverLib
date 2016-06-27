@@ -6,8 +6,8 @@
 
 /**
  *
- *                        ADC¶Ë¿Ú ºÍ STM32f103c8t6°å×ÓµÄ¶ÔÓ¦Òı½Å
- *                      £¨stm32f10xÏµÁĞ°åÈôÓĞÒÔÏÂÒı½ÅÒ²¿É¼æÈİÊ¹ÓÃ£©
+ *                        ADCç«¯å£ å’Œ STM32f103c8t6æ¿å­çš„å¯¹åº”å¼•è„š
+ *                      ï¼ˆstm32f10xç³»åˆ—æ¿è‹¥æœ‰ä»¥ä¸‹å¼•è„šä¹Ÿå¯å…¼å®¹ä½¿ç”¨ï¼‰
  *                          PA0---ADC12_IN0   PB0---ADC12_IN8
  *                          PA1---ADC12_IN1   PB1---ADC12_IN9
  *                          PA2---ADC12_IN2   PC0---ADC12_IN10
@@ -32,7 +32,7 @@ private:
 public:
 	ADC(u8 ch0Num, u8 ch1Num=0xFF, u8 ch2Num=0xFF, u8 ch3Num=0xFF, u8 ch4Num=0xFF, u8 ch5Num=0xFF, u8 ch6Num=0xFF, u8 ch7Num=0xFF, u8 ch8Num=0xFF, u8 ch9Num=0xFF);
 	double operator[](u8 chNum);
-	float Voltage_I(uint8_t channelNumber, float resister_a,float resister_b,float fullRange);//Ê¹ÓÃ»ı·ÖµÄ·½Ê½¼ÆËãµçÑ¹Öµ£¬²ÎÊıÎªÁ½¸ö·ÖÑ¹µç×èµÄ×èÖµ£¬aÎª½Ó½üÕı¼«µÄ£¬bÎª½Ó½ü¸º¼«µÄµç×è£¬fullrangeÎªµçÑ¹µÄ×î´óÖµ
+	float Voltage_I(uint8_t channelNumber, float resister_a,float resister_b,float fullRange);
 };
 
 #endif
