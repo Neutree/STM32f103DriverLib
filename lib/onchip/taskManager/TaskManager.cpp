@@ -49,13 +49,12 @@ void TaskManager::DelayS(u16 ns)
 bool TaskManager::TimeSlice(double &record,double timeout)
 {
 	 double NowTime = Time();
-		if(NowTime - record >=timeout)
-		{		
-			record = Time(); //更新记录
-			return true;
-		}
-		else
-			return false;
+	if(NowTime - record >=timeout)
+	{		
+		record = Time(); //更新记录
+		return true;
+	}
+	return false;
 }
 
 

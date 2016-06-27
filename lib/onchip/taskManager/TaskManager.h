@@ -12,10 +12,10 @@ public:
 public:		
 	TaskManager();               //constructor
 	static double Time(void);    //get current time
-	void DelayUs(u16 nus);
-	void DelayMs(u16 nms);
-	void DelayS(u16 ns);
-	bool TimeSlice(double &record,double timeout);  //传入一个时间记录值和一个超时时间 记录达到了超时时间返回tree
+	static void DelayUs(u16 nus);
+	static void DelayMs(u16 nms);
+	static void DelayS(u16 ns);
+	static bool TimeSlice(double &record,double timeout);  //传入一个时间记录值和一个超时时间 记录达到了超时时间返回tree
 };
 extern TaskManager tskmgr;
 
