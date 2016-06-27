@@ -54,11 +54,11 @@ ADC::ADC(u8 ch0Num, u8 ch1Num, u8 ch2Num, u8 ch3Num, u8 ch4Num, u8 ch5Num, u8 ch
 	DMA_DeInit(DMA1_Channel1);                                                 //default set DMA1
 	DMA_InitStructure.DMA_PeripheralBaseAddr = u32(&(ADC1->DR));							 //ADC1->DR address
 	DMA_InitStructure.DMA_MemoryBaseAddr = u32(_adcValue);	                   //first address for save adc value
-	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;												 //������ΪDMAԴ
-	DMA_InitStructure.DMA_BufferSize = chCnt;                                  //����ת����ΪmAdcTotal��1·AD��
-	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;	         //�����ַ������
-	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;  			    				 //�ڴ��ַ������
-	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;//�������ĸ��ɼ�һ·ADһ��
+	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;												 //ÒÔÍâÉèÎªDMAÔ´
+	DMA_InitStructure.DMA_BufferSize = chCnt;                                  //Êý¾Ý×ªÒÆÁ¿ÎªmAdcTotal£¨1Â·AD£©
+	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;	         //ÍâÉèµØÖ·²»µÝÔö
+	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;  			    				 //ÄÚ´æµØÖ·²»µÝÔö
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;//½ÓÏÂÀ´µÄ¸ú²É¼¯Ò»Â·ADÒ»Ñù
 	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
 	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;										
 	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
@@ -107,5 +107,19 @@ double ADC::operator[](u8 chNum)
 		return 0;
 }
 
+/**
+  *获取电压值
+  *@param channelNumber  ADC通道号
+  *@param resister_a   电阻a的值，接近电源的电阻值
+  *@param resister_b   电阻b的值，接近地的电阻值
+  *@param fullRange   电压最大值
+  *@retval 电压值
+  */
+float ADC::Voltage_I(uint8_t channelNumber,float resister_a,float resister_b,float fullRange)
+{
+	static float voltage = fullRange;
+	voltage += 0.002*((*this)[channelNumber]*((resister_a+resister_b)*1.0/resister_b) - voltage);
+	return voltage;
+}
 
 

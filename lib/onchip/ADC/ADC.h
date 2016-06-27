@@ -32,6 +32,7 @@ private:
 public:
 	ADC(u8 ch0Num, u8 ch1Num=0xFF, u8 ch2Num=0xFF, u8 ch3Num=0xFF, u8 ch4Num=0xFF, u8 ch5Num=0xFF, u8 ch6Num=0xFF, u8 ch7Num=0xFF, u8 ch8Num=0xFF, u8 ch9Num=0xFF);
 	double operator[](u8 chNum);
+	float Voltage_I(uint8_t channelNumber, float resister_a,float resister_b,float fullRange);//使用积分的方式计算电压值，参数为两个分压电阻的阻值，a为接近正极的，b为接近负极的电阻，fullrange为电压的最大值
 };
 
 #endif
