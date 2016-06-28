@@ -10,9 +10,9 @@
 //#define USE_USART3           //---USART3--//
 
 //~~~~~~~~~~~~~~~~I2C Congfigure~~~~~~~~~~~~//
-//#define USE_I2C                //----IIC----//
+#define USE_I2C                //----IIC----//
 //#define USE_I2C1             //----IIC1---//
-//#define USE_I2C2               //----IIC2---//
+#define USE_I2C2               //----IIC2---//
 
 //~~~~~~~~~~~~~~~Timer Congfigure~~~~~~~~~~~//
 //#define USE_TIMER              //---Timer---//

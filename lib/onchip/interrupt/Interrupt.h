@@ -112,8 +112,6 @@ extern "C"{
 void USART1_IRQHandler(void);
 void USART2_IRQHandler(void);
 void USART3_IRQHandler(void);
-void DMA1_Channel4_IRQHandler(void);
-void DMA1_Channel7_IRQHandler(void);
 void DMA1_Channel2_IRQHandler(void);
 void I2C1_EV_IRQHandler(void);
 void I2C1_ER_IRQHandler(void);
@@ -130,6 +128,31 @@ void EXTI3_IRQHandler(void);
 void EXTI4_IRQHandler(void);
 void EXTI9_5_IRQHandler(void);
 void EXTI15_10_IRQHandler(void);
+
+//////////////////////////////////
+///USART3 send channel 
+//////////////////////////////////
+void DMA1_Channel2_IRQHandler();
+/////////////////////////////////
+///USART1 DMA send channel
+///I2C2   DMA send channel
+/////////////////////////////////
+void DMA1_Channel4_IRQHandler();
+///////////////////////////////
+///I2C2 DMA receive channel
+//////////////////////////////
+void DMA1_Channel5_IRQHandler();
+
+///////////////////////////////
+///I2C1   DMA send channel
+//////////////////////////////
+void DMA1_Channel6_IRQHandler();
+
+/////////////////////////////////
+///USART2 DMA send channel
+///I2C1   DMA receive channel
+////////////////////////////////
+void DMA1_Channel7_IRQHandler();
 	
 }
 

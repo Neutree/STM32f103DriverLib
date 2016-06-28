@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\lib\math;..\..\..\..\lib\onchip\ADC;..\..\..\..\lib\onchip\capture;..\..\..\..\lib\onchip\delay;..\..\..\..\lib\onchip\EXTI;..\..\..\..\lib\onchip\flash;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\onchip\I2C;..\..\..\..\lib\onchip\interrupt;..\..\..\..\lib\onchip\PWM;..\..\..\..\lib\onchip\taskManager;..\..\..\..\lib\onchip\timer;..\..\..\..\lib\onchip\USART;.\app;..\..\..\..\lib\offchip\LED</IncludePath>
+              <IncludePath>..\..\..\..\lib\math;..\..\..\..\lib\onchip\ADC;..\..\..\..\lib\onchip\capture;..\..\..\..\lib\onchip\delay;..\..\..\..\lib\onchip\EXTI;..\..\..\..\lib\onchip\flash;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\onchip\I2C;..\..\..\..\lib\onchip\interrupt;..\..\..\..\lib\onchip\PWM;..\..\..\..\lib\onchip\taskManager;..\..\..\..\lib\onchip\timer;..\..\..\..\lib\onchip\USART;.\app;..\..\..\..\lib\offchip\LED;..\..\..\..\lib\offchip\MPU6050;..\..\..\..\lib\offchip\HMC5883L;..\..\..\..\lib\offchip\Sensor</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -485,6 +485,16 @@
               <FileName>LED.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\..\lib\offchip\LED\LED.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>mpu6050.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\MPU6050\mpu6050.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>HMC5883L.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\HMC5883L\HMC5883L.cpp</FilePath>
             </File>
           </Files>
         </Group>

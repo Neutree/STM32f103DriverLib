@@ -34,19 +34,44 @@ void USART3_IRQHandler(void)    //----USART3 IRQ----//
 #endif
 }
 
+/////////////////////////////////
+///USART1 DMA send channel
+///I2C2   DMA send channel
+/////////////////////////////////
 void DMA1_Channel4_IRQHandler()
 {	
 #ifdef USE_USART1
 	if(pUSART1)
 		pUSART1->DmaIrq();
 #endif
+#ifdef USE_I2C
+#ifdef USE_I2C2
+#ifdef I2C_USE_DMA
+	if(pI2C2)
+		pI2C2->DmaTxIRQ();
+#endif
+#endif
+#endif
 }
 
+/////////////////////////////////
+///USART2 DMA send channel
+///I2C1   DMA receive channel
+////////////////////////////////
 void DMA1_Channel7_IRQHandler()
 {	
 #ifdef USE_USART2
 	if(pUSART2)
 		pUSART2->DmaIrq();
+#endif
+
+#ifdef USE_I2C
+#ifdef USE_I2C1
+#ifdef I2C_USE_DMA
+	if(pI2C1)
+		pI2C1->DmaRxIRQ();
+#endif
+#endif
 #endif
 }
 
@@ -94,6 +119,36 @@ void I2C2_ER_IRQHandler(void)   //----I2C2 ERROE----//
 	pI2C2->ErrorIRQ();
 #endif
 }
+///////////////////////////////
+///I2C1   DMA send channel
+//////////////////////////////
+void DMA1_Channel6_IRQHandler()
+{
+#ifdef USE_I2C
+#ifdef USE_I2C1
+#ifdef I2C_USE_DMA
+	if(pI2C1)
+		pI2C1->DmaTxIRQ();
+#endif
+#endif
+#endif
+}
+
+///////////////////////////////
+///I2C2 DMA receive channel
+//////////////////////////////
+void DMA1_Channel5_IRQHandler()
+{
+	#ifdef USE_I2C
+	#ifdef USE_I2C2
+	#ifdef I2C_USE_DMA
+		if(pI2C2)
+			pI2C2->DmaRxIRQ();
+	#endif
+	#endif
+	#endif
+}
+
 /*END****************************************************************************/
 
 

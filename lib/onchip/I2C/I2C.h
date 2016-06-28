@@ -30,6 +30,8 @@
 #include "stm32f10x_dma.h"
 #include "FIFOBuffer.h"
 #include "Delay.h"
+#include "TaskManager.h"
+#include "Sensor.h"
 
 	/** @defgroup I2C_Configuration_Block
 	  * @{
@@ -38,6 +40,7 @@
 
 						#define I2C_QUEUE_MAX_SIZE    40 //The max size of i2c command queue
 						#define I2C_USE_DMA              //uncomment it if you want to use DMA for USART
+						#define MAX_INTERVAL_NUMBER   5  //相同命令执行的间隔时间的最大的记录数
 //						#define USE_ERROR_CALLBACK       //  use iic error  callback ** this one can not be used now **
 							
 //						#define DEBUG
@@ -98,7 +101,10 @@ typedef struct
 	u8 outDataLen;                  //the length of out data
 	u8* pDataIn;                    //the save address of received data
 	u8 inDataLen;                   //the length of received data
+	bool isRecordInterval;          //whether record time,是否记录两次执行该命令的间隔时间，为0代表不记录，大于零代表记录，数值为记录的数组的下标
+	Sensor* pDevice;                //传感器设备指针
 }I2C_Command_Struct;
+
 
 
 /////////////////////////////
@@ -121,6 +127,8 @@ class I2C
 		DMA_Channel_TypeDef *mDmaTxChannel,*mDmaRxChannel;    //iic dma channel 
 		DMA_InitTypeDef mDMA_InitStructure;                   //i2c dma configuration 
 	#endif
+	
+	
 		/////////////////////////
 		///soft reset iic Peripheral(reset register related to iic peripheral)
 		/////////////////////////
@@ -201,8 +209,9 @@ class I2C
 		///@param sendNum The length of send data
 		///@param dataRead The head  adress of received data array
 		///@param receiveNum The length of receive data
+		///@param isRecordInterval 是否记录两次执行该命令的间隔时间，0为不记录，大于零则为记录，值为储存间隔值数组的下标，使用Interval()获得两次执行相同命令的间隔时间
 		/////////////////////////////
-		bool AddCommand(u8 slaveAddr,u8 registerAddr, u8* dataWrite, u8 sendNum,u8* dataRead, u8 receiveNum);
+		bool AddCommand(u8 slaveAddr,u8 registerAddr, u8* dataWrite, u8 sendNum,u8* dataRead, u8 receiveNum,bool isRecordInterval=false,Sensor* pDevice = 0);
 		
 		////////////////////////////////////////////////////
 		///在调用开始执行命令队列中的命令时会对当前的总线状态进行检查，

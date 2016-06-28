@@ -89,7 +89,7 @@ bool I2C::WaitTransmitComplete(bool errorReset,bool errorClearCmdQueue,bool erro
 	return true;
 }
 
-bool I2C::AddCommand(u8 slaveAddr,u8 register_addr, u8* data_write, u8 sendNum,u8* data_read, u8 receiveNum)
+bool I2C::AddCommand(u8 slaveAddr,u8 register_addr, u8* data_write, u8 sendNum,u8* data_read, u8 receiveNum,bool isRecordInterval,Sensor* pDevice)
 {
 	I2C_Command_Struct IIC_CMD_Temp;	
 	u8 i;	
@@ -139,6 +139,8 @@ bool I2C::AddCommand(u8 slaveAddr,u8 register_addr, u8* data_write, u8 sendNum,u
 			IIC_CMD_Temp.slaveAddr=slaveAddr;
 		}
 	}
+	IIC_CMD_Temp.isRecordInterval = isRecordInterval;//是否记录两次执行该命令的间隔时间
+	IIC_CMD_Temp.pDevice = pDevice;
 	mCmdQueue.Put(IIC_CMD_Temp);//将命令加入队列
 	return true;
 }
@@ -320,6 +322,9 @@ void I2C::EventIRQ()
 					
 						mI2C->CR2 &= ~I2C_IT_BUF; //使用DMA,关闭BUF中断
 					
+						if(mCurrentCmd.isRecordInterval)//需要记录两次执行相同命令的间隔
+							mCurrentCmd.pDevice->Updated();
+						
 						//检查队列是否为空
 						if(mCmdQueue.Size()>0)//队列不为空
 						{
@@ -348,6 +353,8 @@ void I2C::EventIRQ()
 					}
 					else if(mCurrentCmd.inDataLen==0)//接收完毕
 					{
+						if(mCurrentCmd.isRecordInterval)//需要记录两次执行相同命令的间隔
+							mCurrentCmd.pDevice->Updated();
 						
 						//检查队列是否为空
 						if(mCmdQueue.Size()>0)//队列不为空
@@ -375,6 +382,8 @@ void I2C::EventIRQ()
 			}
 			else if(mCurrentCmd.inDataLen==0)//接收完毕
 			{
+				if(mCurrentCmd.recordIntervalNumber)//需要记录两次执行相同命令的间隔
+					mCurrentCmd.pDevice->Updated();
 				
 				//检查队列是否为空
 				if(mCmdQueue.Size()>0)//队列不为空
@@ -407,6 +416,10 @@ void I2C::EventIRQ()
 						if(mCurrentCmd.cmdType >= I2C_WRITE_BYTE)//处于写模式 单字节或者多字节
 						{
 							I2C_GenerateSTOP(mI2C,ENABLE);//产生停止信号
+							
+							if(mCurrentCmd.isRecordInterval)//需要记录两次执行相同命令的间隔
+								mCurrentCmd.pDevice->Updated();
+							
 							//判断队列是否为空
 							if(mCmdQueue.Size()>0)//队列不为空
 							{
@@ -448,6 +461,8 @@ void I2C::EventIRQ()
 						{
 							//已经写完，发送停止信号
 							I2C_GenerateSTOP(mI2C,ENABLE);//产生停止信号
+							if(mCurrentCmd.isRecordInterval)//需要记录两次执行相同命令的间隔
+								mCurrentCmd.pDevice->Updated();
 							//判断队列是否为空
 							if(mCmdQueue.Size()>0)//队列不为空
 							{
@@ -483,6 +498,8 @@ void I2C::EventIRQ()
 						{
 							//已经写完，发送停止信号
 							I2C_GenerateSTOP(mI2C,ENABLE);//产生停止信号
+							if(mCurrentCmd.isRecordInterval)//需要记录两次执行相同命令的间隔
+								mCurrentCmd.pDevice->Updated();
 							//判断队列是否为空
 							if(mCmdQueue.Size()>0)//队列不为空
 							{
@@ -666,6 +683,12 @@ I2C::I2C(u8 i2cNumber,bool useDMA,u32 speed,u8 remap,u8 priorityGroup,
 					uint8_t preemprionPriorityError,uint8_t subPriorityError,
 					uint8_t preemprionPriorityDma,uint8_t subPriorityDma)
 {
+#ifdef USE_I2C
+#ifndef USE_I2C1
+#ifndef USE_I2C2
+ return;
+#endif	
+#endif
 #ifdef I2C_USE_DMA
 	mUseDma=useDMA;
 	if(mUseDma)
@@ -684,6 +707,7 @@ I2C::I2C(u8 i2cNumber,bool useDMA,u32 speed,u8 remap,u8 priorityGroup,
 	mSpeed=speed;
 	if(i2cNumber==1)//I2C1
 	{
+		#ifdef USE_I2C1
 		mI2C=I2C1;
 	#ifdef I2C_USE_DMA
 		
@@ -700,9 +724,11 @@ I2C::I2C(u8 i2cNumber,bool useDMA,u32 speed,u8 remap,u8 priorityGroup,
 	  	pI2C1=this;
 		#endif
 		mRemap=remap;
+		#endif
 	}
 	else//iic2
 	{
+		#ifdef USE_I2C2
 		mI2C=I2C2;
 	#ifdef I2C_USE_DMA
 		if(mUseDma)
@@ -717,6 +743,7 @@ I2C::I2C(u8 i2cNumber,bool useDMA,u32 speed,u8 remap,u8 priorityGroup,
 			pI2C2=this;
 		#endif
 		mRemap=false;
+		#endif
 	}
 	mPriority[0]=preemprionPriorityEvent;
 	mPriority[1]=subPriorityEvent;
@@ -753,6 +780,7 @@ I2C::I2C(u8 i2cNumber,bool useDMA,u32 speed,u8 remap,u8 priorityGroup,
 		mDMA_InitStructure.DMA_PeripheralBaseAddr =(u32)&(mI2C->DR);//外设地址，要在iic初始化完成之后设置，因为mI2c->DR未初始化
 	}
   #endif
+#endif
 }
 bool I2C::Init()
 {
@@ -769,6 +797,7 @@ bool I2C::Init()
 	
 	if(this->GetI2CNumber()==1)//i2c1
 	{
+		#ifdef USE_I2C1
 		i2cClk=RCC_APB1Periph_I2C1;//i2 clock setting
 		eventIrq=I2C1_EV_IRQn;
 		errorIrq=I2C1_ER_IRQn;
@@ -789,9 +818,11 @@ bool I2C::Init()
 			sclPin=GPIO_Pin_6;
 			sdaPin=GPIO_Pin_7;
 		}
+		#endif
 	}
 	else
 	{
+		#ifdef USE_I2C2
 		i2cClk=RCC_APB1Periph_I2C2;
 		sclPin=GPIO_Pin_10;
 		sdaPin=GPIO_Pin_11;
@@ -804,9 +835,8 @@ bool I2C::Init()
 			dmaRxIrq=DMA1_Channel5_IRQn;
 		}
 		#endif
-		#ifdef USE_I2C2
 			pI2C2=this;
-		#endif
+		#endif 
 	}
 	
 	Soft_Reset();//清空I2C相关寄存器  //重要，不能删除
