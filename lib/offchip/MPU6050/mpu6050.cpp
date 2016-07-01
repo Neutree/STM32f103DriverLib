@@ -16,10 +16,10 @@ u8 mpu6050::Init(bool wait)
 	mI2C->AddCommand(MPU6050_ADDRESS,USER_CTRL,&IIC_Write_Temp,1,0,0);
 	IIC_Write_Temp=6;
 	mI2C->AddCommand(MPU6050_ADDRESS,CONFIG,&IIC_Write_Temp,1,0,0);
-	IIC_Write_Temp=0x18;
-	mI2C->AddCommand(MPU6050_ADDRESS,GYRO_CONFIG,&IIC_Write_Temp,1,0,0);//+-2000 °/s
-	IIC_Write_Temp=9;
-	mI2C->AddCommand(MPU6050_ADDRESS,ACCEL_CONFIG,&IIC_Write_Temp,1,0,0);//+-4g   5Hz
+	IIC_Write_Temp=0x00;
+	mI2C->AddCommand(MPU6050_ADDRESS,GYRO_CONFIG,&IIC_Write_Temp,1,0,0);//+-250 °/s
+	IIC_Write_Temp=1;
+	mI2C->AddCommand(MPU6050_ADDRESS,ACCEL_CONFIG,&IIC_Write_Temp,1,0,0);//+-2g   5Hz
 	
 	mI2C->StartCMDQueue();//开始执行命令
 	BypassMode();
@@ -90,22 +90,44 @@ Vector3<int> mpu6050::GetAccRaw()
 }
 Vector3<int> mpu6050::GetGyrRaw()
 {
-	Vector3<int> temp;
-	temp.x=((int16_t)(mData.gyro_XH<<8))|mData.gyro_XL;
-	temp.y=((int16_t)(mData.gyro_YH<<8))|mData.gyro_YL;
-	temp.z=((int16_t)(mData.gyro_ZH<<8))|mData.gyro_ZL;
-	return temp;
+	return mGyroRaw;
 }
 int mpu6050::GetTempRaw()
 {
 	return ((int16_t)(mData.imu_TH<<8))|mData.imu_TL;
 }
 
-Vector3<float> mpu6050::Get_Angle()
+////////////////////////////////
+///获取角速度值
+///@retval 返回三轴的角速度值 
+///////////////////////////////
+Vector3f mpu6050::GetGyr()//获取角速度原始值
 {
-	Vector3<float> temp;
+	Vector3f temp;
+	temp.x=mGyroRaw.x*0.000133158;
+	temp.y=mGyroRaw.y*0.000133158;
+	temp.z=mGyroRaw.z*0.000133158;
+	return temp;
+	 
+	 
+	 
+	
+}
+
+////////////////////////////////
+///获取加速度值
+///@retval 返回三轴的加速度值
+///////////////////////////////
+Vector3f mpu6050::GetAcc()//获取加速度原始值
+{
+	Vector3f temp;
+	temp.x=(((int16_t)(mData.acc_XH<<8)) | mData.acc_XL)/ 16384.0f;
+	temp.y=(((int16_t)(mData.acc_YH<<8)) | mData.acc_YL)/ 16384.0f;
+	temp.z=(((int16_t)(mData.acc_ZH<<8)) | mData.acc_ZL)/ 16384.0f;
 	return temp;
 }
+
+
 
 u8 mpu6050::Update(bool wait,Vector3<int> *acc, Vector3<int> *gyro)
 {
@@ -149,9 +171,67 @@ u8 mpu6050::Update(bool wait,Vector3<int> *acc, Vector3<int> *gyro)
 	if(gyro!=0)
 		*gyro=this->GetGyrRaw();
 
+	
+	//角速度校准
+	static Vector3<int> gyroCalibrate_sum;
+	static u16 gyroCalibrateCnt = 0;
+	mGyroRaw.x=((int16_t)(mData.gyro_XH<<8))|mData.gyro_XL;
+	mGyroRaw.y=((int16_t)(mData.gyro_YH<<8))|mData.gyro_YL;
+	mGyroRaw.z=((int16_t)(mData.gyro_ZH<<8))|mData.gyro_ZL;
+	if(mIsGyrCalibrating)
+	{
+		gyroCalibrate_sum.x += mGyroRaw.x;
+		gyroCalibrate_sum.y += mGyroRaw.y;
+		gyroCalibrate_sum.z += mGyroRaw.z;
+		if(++gyroCalibrateCnt>=25)
+		{
+			mIsGyrCalibrating = false;
+			mGyroOffset.x = gyroCalibrate_sum.x*1.0 / gyroCalibrateCnt;
+			mGyroOffset.y = gyroCalibrate_sum.y*1.0 / gyroCalibrateCnt;
+			mGyroOffset.z = gyroCalibrate_sum.z*1.0 / gyroCalibrateCnt;
+			gyroCalibrate_sum.x = 0;
+			gyroCalibrate_sum.y = 0;
+			gyroCalibrate_sum.z = 0;
+			gyroCalibrateCnt = 0;
+			mIsGyrCalibrated = true;
+		}	
+	}	
+	mGyroRaw -= mGyroOffset;
+	
 	return MOD_READY;
 }
+////////////////////////
+///开始角速度校准
+///@attention 校准时不要移动传感器
+/////////////////////////
+void mpu6050::StartGyroCalibrate()
+{
+	mIsGyrCalibrating = true;
+}
 
+////////////////////////
+///停止角速度校准
+///@attention 校准时不要移动传感器
+/////////////////////////
+void mpu6050::StopGyroCalibrate()
+{
+	mIsGyrCalibrating = false;
+}
+////////////////////
+///是否正在校准角速度
+///////////////////////
+bool mpu6050::IsGyroCalibrating()
+{
+	return mIsGyrCalibrating;
+}
+
+///////////////////////////
+///角速度校准值
+//////////////////////////
+Vector3<int> mpu6050::GetGyrOffset()
+{
+	return mGyroOffset;	
+}
 
 
 ///////////////////////////////////

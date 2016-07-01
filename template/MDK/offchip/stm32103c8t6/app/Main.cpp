@@ -13,10 +13,12 @@
 #include "mpu6050.h"
 #include "HMC5883L.h"
 
+#include "AHRS_DCM.h"
+/************************************硬件定义*************************************/
 //Timer T1(TIM1,1,2,3); //使用定时器计，溢出时间:1S+2毫秒+3微秒
-USART com(1,115200,true);
+USART com(1,115200);
 I2C i2c2(2); 
-mpu6050 mpu6050(i2c2);
+mpu6050 mpu6050(i2c2,500);
 HMC5883L mag(i2c2);
 //PWM pwm2(TIM2,1,1,1,1,20000);  //开启时钟2的4个通道，频率2Whz
 //PWM pwm3(TIM3,1,1,0,0,20000);  //开启时钟3的2个通道，频率2Whz
@@ -31,6 +33,16 @@ GPIO ledRedGPIO(GPIOB,0,GPIO_Mode_Out_PP,GPIO_Speed_50MHz);//LED GPIO
 GPIO ledBlueGPIO(GPIOB,1,GPIO_Mode_Out_PP,GPIO_Speed_50MHz);//LED GPIO
 LED ledRed(ledRedGPIO);//LED red
 LED ledBlue(ledBlueGPIO);//LED blue
+/**************************************************************************/
+
+
+/*************************全局变量*****************************************/
+
+AHRS_DCM ahrs_dcm;
+
+
+/**************************************************************************/
+
 
 /**
   *系统初始化
@@ -47,7 +59,9 @@ void init()
 		com<<"mag connection error\n";
 	//初始化磁力计
 	mag.Init();
+	
 }
+
 
 /**
   *循环体
@@ -55,8 +69,26 @@ void init()
   */
 void loop()
 {
-	static double record_tmgTest=0; //taskmanager时间 测试
-	if(tskmgr.TimeSlice(record_tmgTest,0.2)) //每0.2秒执行一次
+	static double record_tmgTest=0,record_tmgTest2 = 0; //taskmanager时间 测试
+	static bool isCalibrating = false;
+	static Vector3f angle;
+	
+	
+	ledBlue.Blink(0,0.5,false);
+	
+	if(TaskManager::Time()>1.5&&TaskManager::Time()<1.6)
+	{
+		if(!isCalibrating)
+		{
+			mpu6050.StartGyroCalibrate();//启动校准
+			isCalibrating = true;
+			com<<"calibrating ... don't move!!!\n";
+		}
+	}
+	
+	
+	
+	if(tskmgr.TimeSlice(record_tmgTest,0.01)) //每0.01秒执行一次
 	{
 		ledRed.Toggle();
 		//com<<voltage.Voltage_I(4,5.1,1,12)<<"\n";
@@ -68,10 +100,24 @@ void loop()
 		{
 			com<<"mag error\n\n\n";
 		}
-		com<<mpu6050.GetTempRaw()<<"  "<<mpu6050.GetAccRaw().z<<"\t"<<mag.Heading()<<"\t"<<"\tinterval:"<<mpu6050.GetUpdateInterval()<<"\t"<<mag.GetUpdateInterval()<<"\n";
+		if(isCalibrating&&!mpu6050.IsGyroCalibrating())//角速度校准结束
+		{
+			isCalibrating = false;
+			com<<"calibrate complete\n";
+		}
+		if(mpu6050.IsGyroCalibrated())//角速度已经校准了
+		{
+			angle = ahrs_dcm.GetAngle_InertialSensor(mpu6050.GetAccRaw(),mpu6050.GetGyr(),mpu6050.GetUpdateInterval());
+			
+		}
+		
+		
+		
 	}
-	
-	ledBlue.Blink(0,0.5,false);
+	if(tskmgr.TimeSlice(record_tmgTest2,0.2)) //每0.01秒执行一次
+	{
+		com<<angle.x<<"\t"<<angle.y<<"\t"<<angle.z<<"\n";
+	}
 }
 
 
@@ -79,6 +125,7 @@ void loop()
 
 int main()
 {
+	Delay::Ms(500);
 	init();
 	while(1)
 	{
