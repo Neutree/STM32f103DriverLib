@@ -2,8 +2,6 @@
 #define __AHRS_DCM_H__
 
 #include "Matrix3.h"
-#include "USART.h"
-extern USART com;
 class AHRS_DCM
 {
 public:

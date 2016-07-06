@@ -183,7 +183,7 @@ u8 mpu6050::Update(bool wait,Vector3<int> *acc, Vector3<int> *gyro)
 		gyroCalibrate_sum.x += mGyroRaw.x;
 		gyroCalibrate_sum.y += mGyroRaw.y;
 		gyroCalibrate_sum.z += mGyroRaw.z;
-		if(++gyroCalibrateCnt>=25)
+		if(++gyroCalibrateCnt>=500)
 		{
 			mIsGyrCalibrating = false;
 			mGyroOffset.x = gyroCalibrate_sum.x*1.0 / gyroCalibrateCnt;

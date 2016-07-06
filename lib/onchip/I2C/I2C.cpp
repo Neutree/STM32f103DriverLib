@@ -563,13 +563,13 @@ void I2C::ErrorIRQ()
 	u16 Error=mI2C->SR1 & ((uint16_t)0x0F00) ; /*!< I2C errors Mask  *///获取错误信息
 	mI2C->SR1 = ~((uint16_t)0x0F00);//清除错误信息
 	#ifdef DEBUG
-			usart1<<"ER_IRQ\n";
+			LOG("ER_IRQ\n");
 		#endif
 	/* If Bus error occurred ---------------------------------------------------*/
 	if((Error&I2C_ERR_BERR)!=0)
 	{
 		#ifdef DEBUG
-			usart1<<"BERR\n";
+			LOG("BERR\n");
 		#endif
 			/* Generate I2C software reset in order to release SDA and SCL lines */
 			mI2C->CR1 |= I2C_CR1_SWRST; 
@@ -580,7 +580,7 @@ void I2C::ErrorIRQ()
 	if((Error&I2C_ERR_ARLO)!=0)
 	{
 		#ifdef DEBUG
-			usart1<<"ARLO\n";
+			LOG("ARLO\n");
 		#endif
 			/* Generate I2C software reset in order to release SDA and SCL lines */
 			mI2C->CR1 |= I2C_CR1_SWRST; 
@@ -591,7 +591,7 @@ void I2C::ErrorIRQ()
 	if((Error&I2C_ERR_OVR)!=0)
 	{
 		#ifdef DEBUG
-			usart1<<"OVR\n";
+			LOG("OVR\n");
 		#endif
 		  /* No I2C software reset is performed here in order to allow user to get back
 		  the last data received correctly */	    
@@ -601,7 +601,7 @@ void I2C::ErrorIRQ()
 	if((Error&I2C_ERR_AF)!=0)
     {
 		#ifdef DEBUG
-			usart1<<"AF\n";
+			LOG("AF\n");
 		#endif
 		  /* No I2C software reset is performed here in order to allow user to recover 
 		  communication */ 

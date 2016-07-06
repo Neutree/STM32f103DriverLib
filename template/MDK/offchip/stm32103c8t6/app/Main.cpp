@@ -12,17 +12,19 @@
 #include "LED.h"
 #include "mpu6050.h"
 #include "HMC5883L.h"
+#include "BLDCMotor.h"
 
-#include "AHRS_DCM.h"
+
+#include "Gimbal.h"
 /************************************硬件定义*************************************/
 //Timer T1(TIM1,1,2,3); //使用定时器计，溢出时间:1S+2毫秒+3微秒
 USART com(1,115200);
 I2C i2c2(2); 
 mpu6050 mpu6050(i2c2,500);
-HMC5883L mag(i2c2);
-//PWM pwm2(TIM2,1,1,1,1,20000);  //开启时钟2的4个通道，频率2Whz
-//PWM pwm3(TIM3,1,1,0,0,20000);  //开启时钟3的2个通道，频率2Whz
-//PWM pwm4(TIM4,1,1,1,0,20000);  //开启时钟4的3个通道，频率2Whz
+//HMC5883L mag(i2c2);
+PWM pwm2(TIM2,1,1,1,1,20000);  //开启时钟2的4个通道，频率2Whz
+PWM pwm3(TIM3,1,1,0,0,20000);  //开启时钟3的2个通道，频率2Whz
+PWM pwm4(TIM4,1,1,1,0,20000);  //开启时钟4的3个通道，频率2Whz
 //InputCapture_TIM t4(TIM4, 400, true, true, true, true);
 //InputCapture_EXIT ch1(GPIOB,6);
 ADC voltage(4); //读取电压值
@@ -33,13 +35,19 @@ GPIO ledRedGPIO(GPIOB,0,GPIO_Mode_Out_PP,GPIO_Speed_50MHz);//LED GPIO
 GPIO ledBlueGPIO(GPIOB,1,GPIO_Mode_Out_PP,GPIO_Speed_50MHz);//LED GPIO
 LED ledRed(ledRedGPIO);//LED red
 LED ledBlue(ledBlueGPIO);//LED blue
+
+//BLDC Motor
+BLDCMotor motorRoll(&pwm2,1,&pwm2,2,&pwm2,3,0.6);  //roll motor
+BLDCMotor motorPitch(&pwm2,4,&pwm3,1,&pwm3,2,0.45); //pitch motor
+BLDCMotor motorYaw(&pwm4,1,&pwm4,2,&pwm4,3,0.55);   //yaw motor
+
+
 /**************************************************************************/
 
 
 /*************************全局变量*****************************************/
 
-AHRS_DCM ahrs_dcm;
-
+Gimbal gimbal(mpu6050,motorRoll,motorPitch,motorYaw,voltage);
 
 /**************************************************************************/
 
@@ -52,13 +60,14 @@ void init()
 {
 	ledBlue.On();
 	ledRed.Off();
-	//初始化MPU6050（三轴加速度计、三轴角速度计）
-	mpu6050.Init();
-	//测试磁力计是否存在
-	if(!mag.TestConnection(false))
-		com<<"mag connection error\n";
-	//初始化磁力计
-	mag.Init();
+	
+	gimbal.Init();
+	
+//	//测试磁力计是否存在
+//	if(!mag.TestConnection(false))
+//		com<<"mag connection error\n";
+//	//初始化磁力计
+//	mag.Init();
 	
 }
 
@@ -70,53 +79,44 @@ void init()
 void loop()
 {
 	static double record_tmgTest=0,record_tmgTest2 = 0; //taskmanager时间 测试
-	static bool isCalibrating = false;
-	static Vector3f angle;
 	
 	
 	ledBlue.Blink(0,0.5,false);
 	
-	if(TaskManager::Time()>1.5&&TaskManager::Time()<1.6)
+	if(tskmgr.TimeSlice(record_tmgTest,0.002)) //每0.002秒执行一次
 	{
-		if(!isCalibrating)
+		gimbal.UpdateIMU();
+		gimbal.UpdateMotor();
+	}
+	if(tskmgr.TimeSlice(record_tmgTest2,0.5)) //每1秒执行一次，输出电源值
+	{
+		if(gimbal.IsCalibrated())
 		{
-			mpu6050.StartGyroCalibrate();//启动校准
-			isCalibrating = true;
-			com<<"calibrating ... don't move!!!\n";
+			ledRed.Toggle();
+		//	LOG("voltage:");LOG(gimbal.UpdateVoltage(4,5.1,1,12));LOG("\n");
 		}
+		else if(gimbal.IsCalibrating())
+			LOG(".");
+		//com<<"kp:"<<gimbal.mPIDRoll.GetKp()<<"\t"<<gimbal.mPIDRoll.GetKi()<<"\t"<<gimbal.mPIDRoll.GetKd()<<"\n";
 	}
 	
-	
-	
-	if(tskmgr.TimeSlice(record_tmgTest,0.01)) //每0.01秒执行一次
+	if(com.ReceiveBufferSize()>0)
 	{
-		ledRed.Toggle();
-		//com<<voltage.Voltage_I(4,5.1,1,12)<<"\n";
-		if(MOD_ERROR== mpu6050.Update())
-		{
-			com<<"mpu6050 error\n\n\n";
-		}
-		if(MOD_ERROR== mag.Update())
-		{
-			com<<"mag error\n\n\n";
-		}
-		if(isCalibrating&&!mpu6050.IsGyroCalibrating())//角速度校准结束
-		{
-			isCalibrating = false;
-			com<<"calibrate complete\n";
-		}
-		if(mpu6050.IsGyroCalibrated())//角速度已经校准了
-		{
-			angle = ahrs_dcm.GetAngle_InertialSensor(mpu6050.GetAccRaw(),mpu6050.GetGyr(),mpu6050.GetUpdateInterval());
-			
-		}
+		u8 temp;
+		com.GetReceivedData(&temp,1);
+		if(temp == '0')
+			gimbal.mPIDRoll.AddKp(5);
+		else if(temp == '.')
+			gimbal.mPIDRoll.AddKp(-5);
+		else if(temp == '1')
+			gimbal.mPIDRoll.AddKi(1);
+		else if(temp=='2')
+			gimbal.mPIDRoll.AddKi(-1);
+		else if(temp=='4')
+			gimbal.mPIDRoll.AddKd(0.5);
+		else if(temp=='5')
+			gimbal.mPIDRoll.AddKd(-0.5);
 		
-		
-		
-	}
-	if(tskmgr.TimeSlice(record_tmgTest2,0.2)) //每0.01秒执行一次
-	{
-		com<<angle.x<<"\t"<<angle.y<<"\t"<<angle.z<<"\n";
 	}
 }
 
@@ -125,7 +125,7 @@ void loop()
 
 int main()
 {
-	Delay::Ms(500);
+	TaskManager::DelayS(2);
 	init();
 	while(1)
 	{

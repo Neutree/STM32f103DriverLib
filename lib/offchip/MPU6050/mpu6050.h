@@ -32,6 +32,7 @@
 #include "stm32f10x.h"
 #include "I2C.h"
 #include "Vector3.h"
+#include "InertialSensor.h"
 #ifdef MPU6050_USE_TASKMANAGER
 	#include "TaskManager.h"
 #else
@@ -63,7 +64,7 @@ typedef struct
 
 
 
-class mpu6050:public Sensor{
+class mpu6050:public InertialSensor,public Sensor{
 private:
 	I2C *mI2C;
 	/*HealthState mHealth;//0:死亡  1：正常  2：连接正常，但是未初始化*/
@@ -108,7 +109,7 @@ public:
 	///@param wait if wait until the command in queue execute complete
 	///@retval -1:检测到硬件 -2:检测到部分硬件 -3:正在检测 -0:未检测到硬件
 	//////////////////////////
-		u8 Init(bool wait=false);//初始化IMU
+	virtual u8 Init(bool wait=false);//初始化IMU
 
 
 #ifdef MPU6050_USE_TASKMANAGER
@@ -135,14 +136,14 @@ public:
 	///获取加速度原始值
 	///@retval 返回三轴的加速度值
 	///////////////////////////////
-		Vector3<int> GetAccRaw();//获取加速度原始值
+	virtual	Vector3<int> GetAccRaw();//获取加速度原始值
 
 
 	////////////////////////////////
 	///获取角速度原始值
 	///@retval 返回三轴的角速度值 
 	///////////////////////////////
-		Vector3<int> GetGyrRaw();//获取角速度原始值
+	virtual	Vector3<int> GetGyrRaw();//获取角速度原始值
 
 		
 	////////////////////////////////
@@ -155,23 +156,23 @@ public:
 	///获取角速度值
 	///@retval 返回三轴的角速度值 
 	///////////////////////////////
-		Vector3f GetGyr();//获取角速度原始值
+	virtual	Vector3f GetGyr();//获取角速度原始值
 		
 	////////////////////////////////
 	///获取加速度值
 	///@retval 返回三轴的加速度值
 	///////////////////////////////
-		Vector3f GetAcc();//获取加速度原始值
+	virtual	Vector3f GetAcc();//获取加速度原始值
 
 	///////////////////////////
 	///角速度校准值
 	//////////////////////////
-	Vector3<int> GetGyrOffset();
+	virtual Vector3<int> GetGyrOffset();
 	
 	/////////////////////////////
 	///角速度校准是否完毕
 	//////////////////////////////
-	bool IsGyroCalibrated()
+	virtual bool IsGyroCalibrated()
 	{
 		return mIsGyrCalibrated;
 	}
@@ -185,26 +186,26 @@ public:
 	///@return if wait set to true,MOD_READY:update succed MOD_ERROR:update fail  MOD_BUSY:Update interval is too short
 	///        if wait set to false,MOD_ERROR:发送更新数据失败 MOD_READY:命令将会发送（具体的发送时间取决于队列中的排队的命令的数量）MOD_BUSY:Update interval is too short
 	//////////////////////////////
-		u8 Update(bool wait=false,Vector3<int> *acc=0, Vector3<int> *gyro=0);
+	virtual	u8 Update(bool wait=false,Vector3<int> *acc=0, Vector3<int> *gyro=0);
 
 
 	////////////////////////
 	///开始角速度校准
 	///@attention 校准时不要移动传感器
 	/////////////////////////
-	void StartGyroCalibrate();
+	virtual void StartGyroCalibrate();
 	
 	////////////////////////
 	///停止角速度校准
 	///@attention 校准时不要移动传感器
 	/////////////////////////
-	void StopGyroCalibrate();
+	virtual void StopGyroCalibrate();
 	
 	
 	////////////////////
 	///是否正在校准角速度
 	///////////////////////
-	bool IsGyroCalibrating();
+	virtual bool IsGyroCalibrating();
 	
 	///////////////////////////////////
 	///检测mpu6050状态,状态来自于调用update函数之后
@@ -216,7 +217,7 @@ public:
 	//////////////////////////////////////
 	///获得两次数据采集的间隔
 	//////////////////////////////////////
-	double GetUpdateInterval();
+	virtual double GetUpdateInterval();
 };
 
 
