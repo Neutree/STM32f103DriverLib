@@ -548,6 +548,9 @@ void I2C::EventIRQ()
 			Soft_Reset();
 			mState = STATE_ERROR;//状态设置为错误状态
 			break;
+		case 0x00000040:
+			I2C_ReceiveData(mI2C); //读出数据，清除RxNE标志
+			break;
 	}
 	if(I2C_Status!=I2C_EVENT_MASTER_BYTE_TRANSMITTED)//
 		timeOut=0;
