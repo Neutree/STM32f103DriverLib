@@ -12,7 +12,7 @@
 #define __REMOTECONTROL_H
 
 /* Includes ------------------------------------------------------*/
-#include "InputCapture.h"
+#include "InputCapture_TIM.h"
 
 /*  define ------------------------------------------------------------*/
 #define REMOTECONTROL_LOSE 				0x00
@@ -73,10 +73,10 @@ class RemoteControl{
 		uint16_t mOriginalAdditional8;
 	
 	//Save the hunter and channel number(保存捕获者和通道号)
-		InputCapture *mHunter1;
+		InputCapture_TIM *mHunter1;
 		u8 mPitchCh1,mThrottleCh2,mYawCh3,mRollCh4;
 	
-		InputCapture *mHunter2;
+		InputCapture_TIM *mHunter2;
 		u8 mModelCh5,mCh6,mCh7,mCh8;
 	
 	
@@ -125,8 +125,8 @@ class RemoteControl{
     ///@param hunter1 传入一个捕获类的对象
 	///@param Pit/Thr/Yaw/Rol 捕获对象对应姿态的通道号
 	/////////////////////////////////////////////////////
-		RemoteControl(InputCapture *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol);
-	  RemoteControl(InputCapture *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol,InputCapture *hunter2,u8 Ch5,u8 Ch6,u8 Ch7,u8 Ch8);
+		RemoteControl(InputCapture_TIM *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol);
+	  RemoteControl(InputCapture_TIM *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol,InputCapture_TIM *hunter2,u8 Ch5,u8 Ch6,u8 Ch7,u8 Ch8);
 		~RemoteControl();
 			
 	////////////////////////////////////////////////////

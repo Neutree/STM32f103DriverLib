@@ -154,6 +154,22 @@ void DMA1_Channel5_IRQHandler()
 
 
 /*TIM****************************************************************************/
+#ifdef USE_CAPTURE_TIM1
+InputCapture_TIM *pICP1;
+#endif
+
+#ifdef USE_CAPTURE_TIM2
+InputCapture_TIM *pICP2;
+#endif
+
+#ifdef USE_CAPTURE_TIM3
+InputCapture_TIM *pICP3;
+#endif
+
+#ifdef USE_CAPTURE_TIM4
+InputCapture_TIM *pICP4;
+#endif
+
 void TIM1_UP_IRQHandler(void)   //----TIM1 Up-------//
 { 
 #ifdef USE_TIMER1

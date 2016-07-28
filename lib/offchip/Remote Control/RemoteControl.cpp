@@ -1,7 +1,7 @@
 #include "RemoteControl.h"
 
 
-RemoteControl::RemoteControl(InputCapture *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol)
+RemoteControl::RemoteControl(InputCapture_TIM *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol)
 {
 	State=REMOTECONTROL_LOCK;
 	
@@ -33,7 +33,7 @@ RemoteControl::RemoteControl(InputCapture *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol)
 	
 }
 //More than four channels(超过四个通道的构造函数)
-RemoteControl::RemoteControl(InputCapture *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol,InputCapture *hunter2,u8 Ch5,u8 Ch6,u8 Ch7,u8 Ch8)
+RemoteControl::RemoteControl(InputCapture_TIM *hunter1,u8 Pit,u8 Thr,u8 Yaw,u8 Rol,InputCapture_TIM *hunter2,u8 Ch5,u8 Ch6,u8 Ch7,u8 Ch8)
 {
 	State=REMOTECONTROL_LOCK;
 	
