@@ -548,6 +548,10 @@ void I2C::EventIRQ()
 			Soft_Reset();
 			mState = STATE_ERROR;//状态设置为错误状态
 			break;
+		case 0x00000040:
+			Soft_Reset();
+			mState = STATE_ERROR;//状态设置为错误状态
+			break;
 	}
 	if(I2C_Status!=I2C_EVENT_MASTER_BYTE_TRANSMITTED)//
 		timeOut=0;
