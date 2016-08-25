@@ -4,11 +4,15 @@
   * @author  lissettecarlr
   * @version V1.0
              V1.1 增加开关中断功能
-			 V1.2 增加清除CNT计数器的值的功能
+			       V1.2 增加清除CNT计数器的值的功能
+						 V1.3 增加了最大计数限制
+									增加错误标识ErrorMassage
+									修复了使用了宏定义却没有引入配置文的BUG
 			 
   * @date    10/25/2015(create)  
-			 10/28/2015(Debug)
-			 11/02/2015(add)
+			       10/28/2015(Debug)
+			       11/02/2015(add)
+						 08/25/2016(add Dubug) 
   * @brief   必须配套Interrupt文件使用，用户如需需要编写中断函数，直接编写
 TIMX	CH1		CH2		CH3		CH4
 1		PA8		PA9		PA10 	PA11
@@ -25,10 +29,11 @@ TIMX	CH1		CH2		CH3		CH4
 extern "C"{
 #include "stm32f10x.h"
 }
+#include "Configuration.h"	
 
 /* define -------------------------------------------------------------------*/
-//#define COEFFICIENT  66446
-#define COEFFICIENT  911          
+#define INPUTMAX     59702385 //911*65535 最大计数
+#define COEFFICIENT  911    //72M下不分频最大计时us      
 //  65535/72
 /* class----------------------------------------------------------------------*/
 
@@ -37,9 +42,13 @@ class Timer{
 		u16 mArr;//计数器初值
 		u16 mPsc;//计数器预分频
 		TIM_TypeDef *mTempTimer;//时钟选择
-		void Conversion(u16 s,u16 ms,u16 us);//将时分秒转换为初值和预分频
+		u8 ErrorMassage;//错误信息标识 0标识没有出错 1：输出时间超出最大值
+		bool Conversion(u16 s,u16 ms,u16 us);//将时分秒转换为初值和预分频
 		
 	public:
+		
+	//辅助计数值，初始为0	
+		u16 cnt;
 	////////////////////////////////////////
 	///定时器初始化，默认定时器1，定时1ms
 	///@param timer 选择使用的定时器
@@ -61,8 +70,9 @@ class Timer{
 	///关闭定时器
 	//////////////////
 		void Stop();
+		
 	/////////////////////////////////////////
-	///关闭定时器
+	///中断开关
 	///@param bool true 开启中断  false 关闭中断 
 	//////////////////////////////////////////
 		void OnOrOffIrq(bool Switch);
@@ -70,7 +80,7 @@ class Timer{
 	///////////////////
 	///清空计数器的值
 	//////////////////
-	void ClearCNT(void);
+	  void ClearCNT(void);
 	
 		 		
 };

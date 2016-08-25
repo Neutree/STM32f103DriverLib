@@ -2,15 +2,20 @@
 
 Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Prioritygroup,u8 preemprionPriority,u8 subPriority)
 {
+		cnt = 0;
 	#ifdef USE_TIMER
 	
-
 	//通过计算的出了ARR PSC
 	uint8_t timerIrqChannel;
 	TIM_TimeBaseInitTypeDef TIM_BaseInitStructure;
 	mTempTimer=timer;
 	NVIC_InitTypeDef NVIC_InitStructure;
-    Conversion(second,millisecond,microsecond);
+	
+  if(!Conversion(second,millisecond,microsecond))
+	{
+		ErrorMassage = 1;//输入超出最大值
+		return ;
+	}
 	#ifndef USE_TIMER1
 	#ifndef USE_TIMER2
 	#ifndef USE_TIMER3
@@ -62,7 +67,7 @@ Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Pr
 	  TIM_BaseInitStructure.TIM_RepetitionCounter=0;
 		TIM_BaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;//设置计数方式
 		TIM_TimeBaseInit(timer,&TIM_BaseInitStructure);
-		TIM_ClearFlag(timer, TIM_FLAG_Update);//清空中断标识   写了就进不了中断了
+		TIM_ClearFlag(timer, TIM_FLAG_Update);//清空中断标识
 		TIM_ITConfig(timer, TIM_IT_Update, ENABLE); //使能中断
 	
 	switch(Prioritygroup)//中断分组
@@ -90,6 +95,9 @@ Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Pr
 		NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
 	TIM_Cmd(mTempTimer, ENABLE);//开启定时器
 	/**/
+	
+	ErrorMassage = 0;//没有出错
+	
 	#endif
 }
 
@@ -113,14 +121,17 @@ void Timer::Stop()
 如果始终未查找到能够整除的预分频和初值，则使用一开始的初始预分频，然后计算出
 一个相近的初值来代替。
 */	
-void Timer::Conversion(u16 s,u16 ms,u16 us) //将时分秒转化为预分频和初值
+bool Timer::Conversion(u16 s,u16 ms,u16 us) //将时分秒转化为预分频和初值
 {
 	u32 time;
 	u16 tempPsc;//用于暂存计算值
 	u32 tempArr=0xfffff;
 	
-	
 	time=s*1000000+ms*1000+us; //计算总时间 单位us
+	
+	if(time >INPUTMAX)
+		return false; //超出最大计数范围
+	
 	if(time<COEFFICIENT) //如果一分频可以满足
 		mPsc=1;
 	else
@@ -143,7 +154,7 @@ void Timer::Conversion(u16 s,u16 ms,u16 us) //将时分秒转化为预分频和�
 	else
 		mArr=tempArr;
 	
-	
+	return true;
 	
 }
 
