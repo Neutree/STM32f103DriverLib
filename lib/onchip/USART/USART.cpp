@@ -45,7 +45,7 @@ bool USART::SendData(uint8_t *pbuffer, uint32_t size)
 	{
 		if(bufferTx.Size()>0)//数据区确实存在数据
 		{
-			USART_ClearITPendingBit(usart, USART_IT_TC);	  //清标记，防止第一个数据发送不出去的情况，一定是要先清再打开
+			USART_ClearITPendingBit(usart, USART_IT_TC);//清标记，防止第一个数据发送不出去的情况，一定是要先清再打开
 			USART_ITConfig(usart, USART_IT_TC, ENABLE);//开启发送中断，然后发送数据
 			USART_GetFlagStatus(usart, USART_FLAG_TC);//读取sr，清除发送完成标志，不然有时可能会有第一个字符发送不出去的情况
 			isBusySend=true;
@@ -165,7 +165,7 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 		if(remap==0x01)
 		{
 			RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
-			GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);
+			GPIO_PinRemapConfig(GPIO_Remap_USART1, ENABLE);//改变指定管脚的映射
 			
 			txPin = 6;
 			rxPin = 7;
@@ -293,8 +293,8 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 	
 
 	//add by jason
-	GPIO tx(USART_GPIO,txPin,GPIO_Mode_AF_PP,GPIO_Speed_10MHz);	
-	GPIO rx(USART_GPIO,rxPin,GPIO_Mode_IN_FLOATING,GPIO_Speed_10MHz);
+	GPIO tx(USART_GPIO,txPin,GPIO_Mode_AF_PP,GPIO_Speed_10MHz);	 //复用推挽输出
+	GPIO rx(USART_GPIO,rxPin,GPIO_Mode_IN_FLOATING,GPIO_Speed_10MHz);//浮空输入
 	
 	mTx = tx;
 	mRx = rx;
@@ -437,7 +437,6 @@ void USART::SetBaudRate(uint32_t baudRate)
 	uint32_t fractionaldivider = 0x00;
 	uint32_t usartxbase = 0;
 	RCC_ClocksTypeDef RCC_ClocksStatus;
-
 
 	usartxbase = (uint32_t)usart;
 
@@ -592,13 +591,13 @@ USART& USART::operator<<(char charactor)
 UsartIrqType USART::Irq()
 {
 	UsartIrqType type;
-	if(USART_GetITStatus(usart,USART_IT_RXNE)!=RESET)
+	if(USART_GetITStatus(usart,USART_IT_RXNE)!=RESET) //接收中断
 	{
 		bufferRx.Put(USART_ReceiveData(usart));
 		USART_ClearITPendingBit(usart,USART_IT_RXNE);        //清除中断标志
 		type = USART_RX_IRQ;
 	}
-	if(USART_GetITStatus(usart,USART_IT_TXE)!=RESET)//一个字节发送完成
+	if(USART_GetITStatus(usart,USART_IT_TXE)!=RESET)//一个字节发送完成  发送中断
 	{
 		static u8 dataToSend=0;
 		if(bufferTx.Size()>0)
@@ -614,7 +613,7 @@ UsartIrqType USART::Irq()
 		
 		type = USART_TX_IRQ;
 	}
-	if(USART_GetITStatus(usart,USART_IT_TC)!=RESET)//一个字节发送完成
+	if(USART_GetITStatus(usart,USART_IT_TC)!=RESET)//一个字节发送完成  传输完成中断
 	{
 		static u8 dataToSend=0;
 		if(bufferTx.Size()>0)

@@ -2,7 +2,6 @@
 
 Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Prioritygroup,u8 preemprionPriority,u8 subPriority)
 {
-		cnt = 0;
 	#ifdef USE_TIMER
 	
 	//通过计算的出了ARR PSC
@@ -64,7 +63,7 @@ Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Pr
 		TIM_BaseInitStructure.TIM_Period = mArr-1; //设置初值
 		TIM_BaseInitStructure.TIM_Prescaler =mPsc-1;//设置预分频
 		TIM_BaseInitStructure.TIM_ClockDivision = 0;//设置时钟分割
-	  TIM_BaseInitStructure.TIM_RepetitionCounter=0;
+	  TIM_BaseInitStructure.TIM_RepetitionCounter=0;//重复溢出多少次产生一个中断
 		TIM_BaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;//设置计数方式
 		TIM_TimeBaseInit(timer,&TIM_BaseInitStructure);
 		TIM_ClearFlag(timer, TIM_FLAG_Update);//清空中断标识
@@ -93,7 +92,8 @@ Timer::Timer(TIM_TypeDef *timer,u16 second,u16 millisecond,u16 microsecond,u8 Pr
 		NVIC_InitStructure.NVIC_IRQChannelSubPriority = subPriority;  //从优先
 		NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
 		NVIC_Init(&NVIC_InitStructure);  //初始化NVIC寄存器
-	TIM_Cmd(mTempTimer, ENABLE);//开启定时器
+	
+	//TIM_Cmd(mTempTimer, ENABLE);//开启定时器
 	/**/
 	
 	ErrorMassage = 0;//没有出错

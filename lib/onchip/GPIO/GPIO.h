@@ -17,8 +17,8 @@
 #include <stm32f10x.h>
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_rcc.h"
-#include <misc.h>
-#include <stdbool.h>
+//#include <misc.h>
+//#include <stdbool.h>
 
 
 /**
@@ -33,12 +33,12 @@ class GPIO
 {
 	private:
 		static const  uint16_t     	mPin[16];
-		
-		GPIOMode_TypeDef			mMode;
+		GPIOMode_TypeDef			  mMode;
 		GPIOSpeed_TypeDef 			mSpeed;
 	
 		/*	The function to configure the RCC of GPIO	*/
 		void RCC_Configuration();
+	
 	public:
 		GPIO_TypeDef				*mPort;
 		uint16_t					mSelectPin;

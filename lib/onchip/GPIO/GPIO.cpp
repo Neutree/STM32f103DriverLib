@@ -19,10 +19,10 @@ GPIO::GPIO(GPIO_TypeDef *port,uint16_t pin,GPIOMode_TypeDef mode,GPIOSpeed_TypeD
 	GPIO_Init(mPort,&GPIO_InitStructure);	
 }
 
+
 //The function to configure the RCC of GPIO
 void GPIO::RCC_Configuration()
 {
-//	SystemInit();	//系统设置初始化
 	if(mPort==GPIOA)
 	{
 		RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);

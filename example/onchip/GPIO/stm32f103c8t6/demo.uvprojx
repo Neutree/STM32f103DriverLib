@@ -409,29 +409,14 @@
           <GroupName>lib</GroupName>
           <Files>
             <File>
-              <FileName>USART.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\..\lib\onchip\USART\USART.cpp</FilePath>
-            </File>
-            <File>
               <FileName>GPIO.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\..\lib\onchip\GPIO\GPIO.cpp</FilePath>
             </File>
             <File>
-              <FileName>Timer.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\..\lib\onchip\timer\Timer.cpp</FilePath>
-            </File>
-            <File>
               <FileName>Delay.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\..\lib\onchip\delay\Delay.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Interrupt.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\system\Interrupt.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -442,16 +427,6 @@
               <FileName>main.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\system\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Configuration.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\system\Configuration.h</FilePath>
-            </File>
-            <File>
-              <FileName>UserInterrupt.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\system\UserInterrupt.cpp</FilePath>
             </File>
           </Files>
         </Group>

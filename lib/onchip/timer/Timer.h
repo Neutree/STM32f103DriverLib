@@ -29,7 +29,8 @@ TIMX	CH1		CH2		CH3		CH4
 extern "C"{
 #include "stm32f10x.h"
 }
-#include "Configuration.h"	
+#include "Interrupt.h"
+
 
 /* define -------------------------------------------------------------------*/
 #define INPUTMAX     59702385 //911*65535 最大计数
@@ -47,8 +48,6 @@ class Timer{
 		
 	public:
 		
-	//辅助计数值，初始为0	
-		u16 cnt;
 	////////////////////////////////////////
 	///定时器初始化，默认定时器1，定时1ms
 	///@param timer 选择使用的定时器
