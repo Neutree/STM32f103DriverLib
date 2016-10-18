@@ -5,7 +5,7 @@
 
 //~~~~~~~~~~~~~~~USART Congfigure~~~~~~~~~~~//
 #define USE_USART              //---USART---//
-//#define USE_USART1             //---USART1--//
+#define USE_USART1             //---USART1--//
 //#define USE_USART2           //---USART2--//
 //#define USE_USART3           //---USART3--//
 
