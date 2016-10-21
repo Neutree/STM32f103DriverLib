@@ -440,20 +440,19 @@ void USART::SetBaudRate(uint32_t baudRate)
 
 	usartxbase = (uint32_t)usart;
 
-
 	/*---------------------------- USART BRR Configuration -----------------------*/
 	/* Configure the USART Baud Rate -------------------------------------------*/
 	RCC_GetClocksFreq(&RCC_ClocksStatus);
 	if (usartxbase == USART1_BASE)
 	{
-	apbclock = RCC_ClocksStatus.PCLK2_Frequency;
+	  apbclock = RCC_ClocksStatus.PCLK2_Frequency;
 	}
 	else
 	{
 	apbclock = RCC_ClocksStatus.PCLK1_Frequency;
 	}
 
-	/* Determine the integer part */
+	/* Determine the integer part 确定整数部分 */
 	if ((usart->CR1 & ((u16)0x8000)) != 0)//CR1_OVER8_Set=((u16)0x8000)
 	{
 	/* Integer part computing in case Oversampling mode is 8 Samples */
@@ -464,6 +463,7 @@ void USART::SetBaudRate(uint32_t baudRate)
 	/* Integer part computing in case Oversampling mode is 16 Samples */
 	integerdivider = ((25 * apbclock) / (4 * (baudRate)));    
 	}
+	
 	tmpreg = (integerdivider / 100) << 4;
 
 	/* Determine the fractional part */
