@@ -1,8 +1,8 @@
 /* -----------------------------------------------------------------------------
- * Copyright (C) 2016 ARM Limited. All rights reserved.
+ * Copyright (C) 2015 ARM Limited. All rights reserved.
  *
- * $Date:        29. March 2016
- * $Revision:    V1.1.1
+ * $Date:        8. October 2015
+ * $Revision:    V1.1.0
  *
  * Project:      RTE Device Configuration for STMicroelectronics STM32F1xx
  * -------------------------------------------------------------------------- */
@@ -48,24 +48,18 @@
 // <i> Configuration settings for Driver_USART1 in component ::CMSIS Driver:USART
 #define RTE_USART1                       0
 
-//   <o> USART1_TX Pin <0=>Not Used <1=>PA9
+//   <o> USART1_TX Pin <0=>PA9
 #define RTE_USART1_TX_PORT_ID_DEF       0
 #if    (RTE_USART1_TX_PORT_ID_DEF == 0)
-#define RTE_USART1_TX_DEF               0
-#elif  (RTE_USART1_TX_PORT_ID_DEF == 1)
-#define RTE_USART1_TX_DEF               1
 #define RTE_USART1_TX_PORT_DEF          GPIOA
 #define RTE_USART1_TX_BIT_DEF           9
 #else
 #error "Invalid USART1_TX Pin Configuration!"
 #endif
 
-//   <o> USART1_RX Pin <0=>Not Used <1=>PA10
+//   <o> USART1_RX Pin <0=>PA10
 #define RTE_USART1_RX_PORT_ID_DEF       0
 #if    (RTE_USART1_RX_PORT_ID_DEF == 0)
-#define RTE_USART1_RX_DEF               0
-#elif  (RTE_USART1_RX_PORT_ID_DEF == 1)
-#define RTE_USART1_RX_DEF               1
 #define RTE_USART1_RX_PORT_DEF          GPIOA
 #define RTE_USART1_RX_BIT_DEF           10
 #else
@@ -112,24 +106,18 @@
 //   <i> Enable USART1 Pin Remapping
 #define RTE_USART1_REMAP_FULL           0
 
-//     <o> USART1_TX Pin <0=>Not Used <1=>PB6
+//     <o> USART1_TX Pin <0=>PB6
 #define RTE_USART1_TX_PORT_ID_FULL      0
 #if    (RTE_USART1_TX_PORT_ID_FULL == 0)
-#define RTE_USART1_TX_FULL              0
-#elif  (RTE_USART1_TX_PORT_ID_FULL == 1)
-#define RTE_USART1_TX_FULL              1
 #define RTE_USART1_TX_PORT_FULL         GPIOB
 #define RTE_USART1_TX_BIT_FULL          6
 #else
 #error "Invalid USART1_TX Pin Configuration!"
 #endif
 
-//     <o> USART1_RX Pin <0=>Not Used <1=>PB7
+//     <o> USART1_RX Pin <0=>PB7
 #define RTE_USART1_RX_PORT_ID_FULL      0
 #if    (RTE_USART1_RX_PORT_ID_FULL == 0)
-#define RTE_USART1_RX_FULL              0
-#elif  (RTE_USART1_RX_PORT_ID_FULL == 1)
-#define RTE_USART1_RX_FULL              1
 #define RTE_USART1_RX_PORT_FULL         GPIOB
 #define RTE_USART1_RX_BIT_FULL          7
 #else
@@ -139,10 +127,8 @@
 
 #if    (RTE_USART1_REMAP_FULL)
 #define RTE_USART1_AF_REMAP              AFIO_USART1_REMAP
-#define RTE_USART1_TX                    RTE_USART1_TX_FULL
 #define RTE_USART1_TX_PORT               RTE_USART1_TX_PORT_FULL
 #define RTE_USART1_TX_BIT                RTE_USART1_TX_BIT_FULL
-#define RTE_USART1_RX                    RTE_USART1_RX_FULL
 #define RTE_USART1_RX_PORT               RTE_USART1_RX_PORT_FULL
 #define RTE_USART1_RX_BIT                RTE_USART1_RX_BIT_FULL
 #define RTE_USART1_CK_PORT               RTE_USART1_CK_PORT_DEF
@@ -153,10 +139,8 @@
 #define RTE_USART1_RTS_BIT               RTE_USART1_RTS_BIT_DEF
 #else 
 #define RTE_USART1_AF_REMAP              AFIO_USART1_NO_REMAP
-#define RTE_USART1_TX                    RTE_USART1_TX_DEF
 #define RTE_USART1_TX_PORT               RTE_USART1_TX_PORT_DEF
 #define RTE_USART1_TX_BIT                RTE_USART1_TX_BIT_DEF
-#define RTE_USART1_RX                    RTE_USART1_RX_DEF
 #define RTE_USART1_RX_PORT               RTE_USART1_RX_PORT_DEF
 #define RTE_USART1_RX_BIT                RTE_USART1_RX_BIT_DEF
 #define RTE_USART1_CK_PORT               RTE_USART1_CK_PORT_DEF
@@ -198,24 +182,18 @@
 // <i> Configuration settings for Driver_USART2 in component ::CMSIS Driver:USART
 #define RTE_USART2                      0
 
-//   <o> USART2_TX Pin <0=>Not Used <1=>PA2
+//   <o> USART2_TX Pin <0=>PA2
 #define RTE_USART2_TX_PORT_ID_DEF       0
 #if    (RTE_USART2_TX_PORT_ID_DEF == 0)
-#define RTE_USART2_TX_DEF               0
-#elif  (RTE_USART2_TX_PORT_ID_DEF == 1)
-#define RTE_USART2_TX_DEF               1
 #define RTE_USART2_TX_PORT_DEF          GPIOA
 #define RTE_USART2_TX_BIT_DEF           2
 #else
 #error "Invalid USART2_TX Pin Configuration!"
 #endif
 
-//   <o> USART2_RX Pin <0=>Not Used <1=>PA3
+//   <o> USART2_RX Pin <0=>PA3
 #define RTE_USART2_RX_PORT_ID_DEF       0
 #if    (RTE_USART2_RX_PORT_ID_DEF == 0)
-#define RTE_USART2_RX_DEF               0
-#elif  (RTE_USART2_RX_PORT_ID_DEF == 1)
-#define RTE_USART2_RX_DEF               1
 #define RTE_USART2_RX_PORT_DEF          GPIOA
 #define RTE_USART2_RX_BIT_DEF           3
 #else
@@ -225,21 +203,21 @@
 //   <o> USART2_CK Pin <0=>Not Used <1=>PA4
 #define RTE_USART2_CK_PORT_ID_DEF       0
 #if    (RTE_USART2_CK_PORT_ID_DEF == 0)
-#define RTE_USART2_CK_DEF               0
+#define RTE_USART2_CK                   0
 #elif  (RTE_USART2_CK_PORT_ID_DEF == 1)
-#define RTE_USART2_CK_DEF               1
+#define RTE_USART2_CK                   1
 #define RTE_USART2_CK_PORT_DEF          GPIOA
 #define RTE_USART2_CK_BIT_DEF           4
 #else
 #error "Invalid USART2_CK Pin Configuration!"
 #endif
 
-//   <o> USART2_CTS Pin <0=>Not Used <1=>PA0
+//   <o> USART2_CTS Pin <0=>Not Used<1=>PA0
 #define RTE_USART2_CTS_PORT_ID_DEF      0
 #if    (RTE_USART2_CTS_PORT_ID_DEF == 0)
-#define RTE_USART2_CTS_DEF              0
+#define RTE_USART2_CTS                  0
 #elif  (RTE_USART2_CTS_PORT_ID_DEF == 1)
-#define RTE_USART2_CTS_DEF              1
+#define RTE_USART2_CTS                  1
 #define RTE_USART2_CTS_PORT_DEF         GPIOA
 #define RTE_USART2_CTS_BIT_DEF          0
 #else
@@ -249,9 +227,9 @@
 //   <o> USART2_RTS Pin <0=>Not Used <1=>PA1
 #define RTE_USART2_RTS_PORT_ID_DEF      0
 #if    (RTE_USART2_RTS_PORT_ID_DEF == 0)
-#define RTE_USART2_RTS_DEF              0
+#define RTE_USART2_RTS                  0
 #elif  (RTE_USART2_RTS_PORT_ID_DEF == 1)
-#define RTE_USART2_RTS_DEF              1
+#define RTE_USART2_RTS                  1
 #define RTE_USART2_RTS_PORT_DEF         GPIOA
 #define RTE_USART2_RTS_BIT_DEF          1
 #else
@@ -262,36 +240,30 @@
 //   <i> Enable USART2 Pin Remapping
 #define RTE_USART2_REMAP_FULL           0
 
-//     <o> USART2_TX Pin <0=>Not Used <1=>PD5
+//     <o> USART2_TX Pin <0=>PD5
 #define RTE_USART2_TX_PORT_ID_FULL      0
 #if    (RTE_USART2_TX_PORT_ID_FULL == 0)
-#define RTE_USART2_TX_FULL              0
-#elif  (RTE_USART2_TX_PORT_ID_FULL == 1)
-#define RTE_USART2_TX_FULL              1
 #define RTE_USART2_TX_PORT_FULL         GPIOD
 #define RTE_USART2_TX_BIT_FULL          5
 #else
 #error "Invalid USART2_TX Pin Configuration!"
 #endif
 
-//     <o> USART2_RX Pin <0=>Not Used <1=>PD6
+//     <o> USART2_RX Pin <0=>PD6
 #define RTE_USART2_RX_PORT_ID_FULL      0
 #if    (RTE_USART2_RX_PORT_ID_FULL == 0)
-#define RTE_USART2_RX_FULL              0
-#elif  (RTE_USART2_RX_PORT_ID_FULL == 1)
-#define RTE_USART2_RX_FULL              1
 #define RTE_USART2_RX_PORT_FULL         GPIOD
 #define RTE_USART2_RX_BIT_FULL          6
 #else
 #error "Invalid USART2_RX Pin Configuration!"
 #endif
 
-//     <o> USART2_CK Pin <0=>Not Used <1=>PD7
+//     <o> USART3_CK Pin <0=>Not Used <1=>PD7
 #define RTE_USART2_CK_PORT_ID_FULL      0
 #if    (RTE_USART2_CK_PORT_ID_FULL == 0)
-#define RTE_USART2_CK_FULL              0
+#define RTE_USART2_CK                   0
 #elif  (RTE_USART2_CK_PORT_ID_FULL == 1)
-#define RTE_USART2_CK_FULL              1
+#define RTE_USART2_CK                   1
 #define RTE_USART2_CK_PORT_FULL         GPIOD
 #define RTE_USART2_CK_BIT_FULL          7
 #else
@@ -301,9 +273,9 @@
 //     <o> USART2_CTS Pin <0=>Not Used <1=>PD3
 #define RTE_USART2_CTS_PORT_ID_FULL     0
 #if    (RTE_USART2_CTS_PORT_ID_FULL == 0)
-#define RTE_USART2_CTS_FULL             0
+#define RTE_USART2_CTS                  0
 #elif  (RTE_USART2_CTS_PORT_ID_FULL == 1)
-#define RTE_USART2_CTS_FULL             1
+#define RTE_USART2_CTS                  1
 #define RTE_USART2_CTS_PORT_FULL        GPIOD
 #define RTE_USART2_CTS_BIT_FULL         3
 #else
@@ -313,9 +285,9 @@
 //     <o> USART2_RTS Pin <0=>Not Used <1=>PD4
 #define RTE_USART2_RTS_PORT_ID_FULL     0
 #if    (RTE_USART2_RTS_PORT_ID_FULL == 0)
-#define RTE_USART2_RTS_FULL             0
+#define RTE_USART2_RTS                  0
 #elif  (RTE_USART2_RTS_PORT_ID_FULL == 1)
-#define RTE_USART2_RTS_FULL             1
+#define RTE_USART2_RTS                  1
 #define RTE_USART2_RTS_PORT_FULL        GPIOD
 #define RTE_USART2_RTS_BIT_FULL         4
 #else
@@ -325,36 +297,26 @@
 
 #if    (RTE_USART2_REMAP_FULL)
 #define RTE_USART2_AF_REMAP              AFIO_USART2_REMAP
-#define RTE_USART2_TX                    RTE_USART2_TX_FULL
 #define RTE_USART2_TX_PORT               RTE_USART2_TX_PORT_FULL
 #define RTE_USART2_TX_BIT                RTE_USART2_TX_BIT_FULL
-#define RTE_USART2_RX                    RTE_USART2_RX_FULL
 #define RTE_USART2_RX_PORT               RTE_USART2_RX_PORT_FULL
 #define RTE_USART2_RX_BIT                RTE_USART2_RX_BIT_FULL
-#define RTE_USART2_CK                    RTE_USART2_CK_FULL
 #define RTE_USART2_CK_PORT               RTE_USART2_CK_PORT_FULL
 #define RTE_USART2_CK_BIT                RTE_USART2_CK_BIT_FULL
-#define RTE_USART2_CTS                   RTE_USART2_CTS_FULL
 #define RTE_USART2_CTS_PORT              RTE_USART2_CTS_PORT_FULL
 #define RTE_USART2_CTS_BIT               RTE_USART2_CTS_BIT_FULL
-#define RTE_USART2_RTS                   RTE_USART2_RTS_FULL
 #define RTE_USART2_RTS_PORT              RTE_USART2_RTS_PORT_FULL
 #define RTE_USART2_RTS_BIT               RTE_USART2_RTS_BIT_FULL
 #else 
 #define RTE_USART2_AF_REMAP              AFIO_USART2_NO_REMAP
-#define RTE_USART2_TX                    RTE_USART2_TX_DEF
 #define RTE_USART2_TX_PORT               RTE_USART2_TX_PORT_DEF
 #define RTE_USART2_TX_BIT                RTE_USART2_TX_BIT_DEF
-#define RTE_USART2_RX                    RTE_USART2_RX_DEF
 #define RTE_USART2_RX_PORT               RTE_USART2_RX_PORT_DEF
 #define RTE_USART2_RX_BIT                RTE_USART2_RX_BIT_DEF
-#define RTE_USART2_CK                    RTE_USART2_CK_DEF
 #define RTE_USART2_CK_PORT               RTE_USART2_CK_PORT_DEF
 #define RTE_USART2_CK_BIT                RTE_USART2_CK_BIT_DEF
-#define RTE_USART2_CTS                   RTE_USART2_CTS_DEF
 #define RTE_USART2_CTS_PORT              RTE_USART2_CTS_PORT_DEF
 #define RTE_USART2_CTS_BIT               RTE_USART2_CTS_BIT_DEF
-#define RTE_USART2_RTS                   RTE_USART2_RTS_DEF
 #define RTE_USART2_RTS_PORT              RTE_USART2_RTS_PORT_DEF
 #define RTE_USART2_RTS_BIT               RTE_USART2_RTS_BIT_DEF
 #endif
@@ -392,24 +354,18 @@
 // <i> Configuration settings for Driver_USART3 in component ::CMSIS Driver:USART
 #define RTE_USART3                      0
 
-//   <o> USART3_TX Pin <0=>Not Used <1=>PB10
+//   <o> USART3_TX Pin <0=>PB10
 #define RTE_USART3_TX_PORT_ID_DEF       0
 #if    (RTE_USART3_TX_PORT_ID_DEF == 0)
-#define RTE_USART3_TX_DEF               0
-#elif  (RTE_USART3_TX_PORT_ID_DEF == 1)
-#define RTE_USART3_TX_DEF               1
 #define RTE_USART3_TX_PORT_DEF          GPIOB
 #define RTE_USART3_TX_BIT_DEF           10
 #else
 #error "Invalid USART3_TX Pin Configuration!"
 #endif
 
-//   <o> USART3_RX Pin <0=>Not Used <1=>PB11
+//   <o> USART3_RX Pin <0=>PB11
 #define RTE_USART3_RX_PORT_ID_DEF       0
 #if    (RTE_USART3_RX_PORT_ID_DEF == 0)
-#define RTE_USART3_RX_DEF               0
-#elif  (RTE_USART3_RX_PORT_ID_DEF == 1)
-#define RTE_USART3_RX_DEF               1
 #define RTE_USART3_RX_PORT_DEF          GPIOB
 #define RTE_USART3_RX_BIT_DEF           11
 #else
@@ -419,9 +375,9 @@
 //   <o> USART3_CK Pin <0=>Not Used <1=>PB12
 #define RTE_USART3_CK_PORT_ID_DEF       0
 #if    (RTE_USART3_CK_PORT_ID_DEF == 0)
-#define RTE_USART3_CK_DEF               0
+#define RTE_USART3_CK                   0
 #elif  (RTE_USART3_CK_PORT_ID_DEF == 1)
-#define RTE_USART3_CK_DEF               1
+#define RTE_USART3_CK                   1
 #define RTE_USART3_CK_PORT_DEF          GPIOB
 #define RTE_USART3_CK_BIT_DEF           12
 #else
@@ -431,9 +387,9 @@
 //   <o> USART3_CTS Pin <0=>Not Used <1=>PB13
 #define RTE_USART3_CTS_PORT_ID_DEF      0
 #if    (RTE_USART3_CTS_PORT_ID_DEF == 0)
-#define RTE_USART3_CTS_DEF              0
+#define RTE_USART3_CTS                  0
 #elif  (RTE_USART3_CTS_PORT_ID_DEF == 1)
-#define RTE_USART3_CTS_DEF              1
+#define RTE_USART3_CTS                  1
 #define RTE_USART3_CTS_PORT_DEF         GPIOB
 #define RTE_USART3_CTS_BIT_DEF          13
 #else
@@ -443,9 +399,9 @@
 //   <o> USART3_RTS Pin <0=>Not Used <1=>PB14
 #define RTE_USART3_RTS_PORT_ID_DEF      0
 #if    (RTE_USART3_RTS_PORT_ID_DEF == 0)
-#define RTE_USART3_RTS_DEF              0
+#define RTE_USART3_RTS                  0
 #elif  (RTE_USART3_RTS_PORT_ID_DEF == 1)
-#define RTE_USART3_RTS_DEF              1
+#define RTE_USART3_RTS                  1
 #define RTE_USART3_RTS_PORT_DEF         GPIOB
 #define RTE_USART3_RTS_BIT_DEF          14
 #else
@@ -456,24 +412,18 @@
 //   <i> Enable USART3 Partial Pin Remapping
 #define RTE_USART3_REMAP_PARTIAL        0
 
-//     <o> USART3_TX Pin <0=>Not Used <1=>PC10
+//     <o> USART3_TX Pin <0=>PC10
 #define RTE_USART3_TX_PORT_ID_PARTIAL   0
 #if    (RTE_USART3_TX_PORT_ID_PARTIAL == 0)
-#define RTE_USART3_TX_PARTIAL           0
-#elif  (RTE_USART3_TX_PORT_ID_PARTIAL == 1)
-#define RTE_USART3_TX_PARTIAL           1
 #define RTE_USART3_TX_PORT_PARTIAL      GPIOC
 #define RTE_USART3_TX_BIT_PARTIAL       10
 #else
 #error "Invalid USART3_TX Pin Configuration!"
 #endif
 
-//     <o> USART3_RX Pin <0=>Not Used <1=>PC11
+//     <o> USART3_RX Pin <0=>PC11
 #define RTE_USART3_RX_PORT_ID_PARTIAL   0
 #if    (RTE_USART3_RX_PORT_ID_PARTIAL == 0)
-#define RTE_USART3_RX_PARTIAL           0
-#elif  (RTE_USART3_RX_PORT_ID_PARTIAL == 1)
-#define RTE_USART3_RX_PARTIAL           1
 #define RTE_USART3_RX_PORT_PARTIAL      GPIOC
 #define RTE_USART3_RX_BIT_PARTIAL       11
 #else
@@ -483,9 +433,9 @@
 //     <o> USART3_CK Pin <0=>Not Used <1=>PC12
 #define RTE_USART3_CK_PORT_ID_PARTIAL   0
 #if    (RTE_USART3_CK_PORT_ID_PARTIAL == 0)
-#define RTE_USART3_CK_PARTIAL           0
+#define RTE_USART3_CK                   0
 #elif  (RTE_USART3_CK_PORT_ID_PARTIAL == 1)
-#define RTE_USART3_CK_PARTIAL           1
+#define RTE_USART3_CK                   1
 #define RTE_USART3_CK_PORT_PARTIAL      GPIOC
 #define RTE_USART3_CK_BIT_PARTIAL       12
 #else
@@ -497,24 +447,18 @@
 //   <i> Enable USART3 Full Pin Remapping
 #define RTE_USART3_REMAP_FULL           0
 
-//     <o> USART3_TX Pin <0=>Not Used <1=>PD8
+//     <o> USART3_TX Pin <0=>PD8
 #define RTE_USART3_TX_PORT_ID_FULL      0
 #if    (RTE_USART3_TX_PORT_ID_FULL == 0)
-#define RTE_USART3_TX_FULL              0
-#elif  (RTE_USART3_TX_PORT_ID_FULL == 1)
-#define RTE_USART3_TX_FULL              1
 #define RTE_USART3_TX_PORT_FULL         GPIOD
 #define RTE_USART3_TX_BIT_FULL          8
 #else
 #error "Invalid USART3_TX Pin Configuration!"
 #endif
 
-//     <o> USART3_RX Pin <0=>Not Used <1=>PD9
+//     <o> USART3_RX Pin <0=>PD9
 #define RTE_USART3_RX_PORT_ID_FULL      0
 #if    (RTE_USART3_RX_PORT_ID_FULL == 0)
-#define RTE_USART3_RX_FULL              0
-#elif  (RTE_USART3_RX_PORT_ID_FULL == 1)
-#define RTE_USART3_RX_FULL              1
 #define RTE_USART3_RX_PORT_FULL         GPIOD
 #define RTE_USART3_RX_BIT_FULL          9
 #else
@@ -524,9 +468,9 @@
 //     <o> USART3_CK Pin <0=>Not Used <1=>PD10
 #define RTE_USART3_CK_PORT_ID_FULL      0
 #if    (RTE_USART3_CK_PORT_ID_FULL == 0)
-#define RTE_USART3_CK_FULL              0
+#define RTE_USART3_CK                   0
 #elif  (RTE_USART3_CK_PORT_ID_FULL == 1)
-#define RTE_USART3_CK_FULL              1
+#define RTE_USART3_CK                   1
 #define RTE_USART3_CK_PORT_FULL         GPIOD
 #define RTE_USART3_CK_BIT_FULL          10
 #else
@@ -536,9 +480,9 @@
 //     <o> USART3_CTS Pin <0=>Not Used <1=>PD11
 #define RTE_USART3_CTS_PORT_ID_FULL     0
 #if    (RTE_USART3_CTS_PORT_ID_FULL == 0)
-#define RTE_USART3_CTS_FULL             0
+#define RTE_USART3_CTS                  0
 #elif  (RTE_USART3_CTS_PORT_ID_FULL == 1)
-#define RTE_USART3_CTS_FULL             1
+#define RTE_USART3_CTS                  1
 #define RTE_USART3_CTS_PORT_FULL        GPIOD
 #define RTE_USART3_CTS_BIT_FULL         11
 #else
@@ -548,9 +492,9 @@
 //     <o> USART3_RTS Pin <0=>Not Used <1=>PD12
 #define RTE_USART3_RTS_PORT_ID_FULL     0
 #if    (RTE_USART3_RTS_PORT_ID_FULL == 0)
-#define RTE_USART3_RTS_FULL             0
+#define RTE_USART3_RTS                  0
 #elif  (RTE_USART3_RTS_PORT_ID_FULL == 1)
-#define RTE_USART3_RTS_FULL             1
+#define RTE_USART3_RTS                  1
 #define RTE_USART3_RTS_PORT_FULL        GPIOD
 #define RTE_USART3_RTS_BIT_FULL         12
 #else
@@ -564,53 +508,38 @@
 
 #if    (RTE_USART3_REMAP_FULL)
 #define RTE_USART3_AF_REMAP              AFIO_USART3_REMAP_FULL
-#define RTE_USART3_TX                    RTE_USART3_TX_FULL
 #define RTE_USART3_TX_PORT               RTE_USART3_TX_PORT_FULL
 #define RTE_USART3_TX_BIT                RTE_USART3_TX_BIT_FULL
-#define RTE_USART3_RX                    RTE_USART3_RX_FULL
 #define RTE_USART3_RX_PORT               RTE_USART3_RX_PORT_FULL
 #define RTE_USART3_RX_BIT                RTE_USART3_RX_BIT_FULL
-#define RTE_USART3_CK                    RTE_USART3_CK_FULL
 #define RTE_USART3_CK_PORT               RTE_USART3_CK_PORT_FULL
 #define RTE_USART3_CK_BIT                RTE_USART3_CK_BIT_FULL
-#define RTE_USART3_CTS                   RTE_USART3_CTS_FULL
 #define RTE_USART3_CTS_PORT              RTE_USART3_CTS_PORT_FULL
 #define RTE_USART3_CTS_BIT               RTE_USART3_CTS_BIT_FULL
-#define RTE_USART3_RTS                   RTE_USART3_RTS_FULL
 #define RTE_USART3_RTS_PORT              RTE_USART3_RTS_PORT_FULL
 #define RTE_USART3_RTS_BIT               RTE_USART3_RTS_BIT_FULL
 #elif  (RTE_USART3_REMAP_PARTIAL)
 #define RTE_USART3_AF_REMAP              AFIO_USART3_REMAP_PARTIAL
-#define RTE_USART3_TX                    RTE_USART3_TX_PARTIAL
 #define RTE_USART3_TX_PORT               RTE_USART3_TX_PORT_PARTIAL
 #define RTE_USART3_TX_BIT                RTE_USART3_TX_BIT_PARTIAL
-#define RTE_USART3_RX                    RTE_USART3_RX_PARTIAL
 #define RTE_USART3_RX_PORT               RTE_USART3_RX_PORT_PARTIAL
 #define RTE_USART3_RX_BIT                RTE_USART3_RX_BIT_PARTIAL
-#define RTE_USART3_CK                    RTE_USART3_CK_PARTIAL
 #define RTE_USART3_CK_PORT               RTE_USART3_CK_PORT_PARTIAL
 #define RTE_USART3_CK_BIT                RTE_USART3_CK_BIT_PARTIAL
-#define RTE_USART3_CTS                   RTE_USART3_CTS_DEF
 #define RTE_USART3_CTS_PORT              RTE_USART3_CTS_PORT_DEF
 #define RTE_USART3_CTS_BIT               RTE_USART3_CTS_BIT_DEF
-#define RTE_USART3_RTS                   RTE_USART3_RTS_DEF
 #define RTE_USART3_RTS_PORT              RTE_USART3_RTS_PORT_DEF
 #define RTE_USART3_RTS_BIT               RTE_USART3_RTS_BIT_DEF
 #else
 #define RTE_USART3_AF_REMAP              AFIO_USART3_NO_REMAP
-#define RTE_USART3_TX                    RTE_USART3_TX_DEF
 #define RTE_USART3_TX_PORT               RTE_USART3_TX_PORT_DEF
 #define RTE_USART3_TX_BIT                RTE_USART3_TX_BIT_DEF
-#define RTE_USART3_RX                    RTE_USART3_RX_DEF
 #define RTE_USART3_RX_PORT               RTE_USART3_RX_PORT_DEF
 #define RTE_USART3_RX_BIT                RTE_USART3_RX_BIT_DEF
-#define RTE_USART3_CK                    RTE_USART3_CK_DEF
 #define RTE_USART3_CK_PORT               RTE_USART3_CK_PORT_DEF
 #define RTE_USART3_CK_BIT                RTE_USART3_CK_BIT_DEF
-#define RTE_USART3_CTS                   RTE_USART3_CTS_DEF
 #define RTE_USART3_CTS_PORT              RTE_USART3_CTS_PORT_DEF
 #define RTE_USART3_CTS_BIT               RTE_USART3_CTS_BIT_DEF
-#define RTE_USART3_RTS                   RTE_USART3_RTS_DEF
 #define RTE_USART3_RTS_PORT              RTE_USART3_RTS_PORT_DEF
 #define RTE_USART3_RTS_BIT               RTE_USART3_RTS_BIT_DEF
 #endif
@@ -649,24 +578,18 @@
 #define RTE_UART4                       0
 #define RTE_UART4_AF_REMAP              AFIO_UNAVAILABLE_REMAP
 
-//   <o> UART4_TX Pin <0=>Not Used <1=>PC10
+//   <o> UART4_TX Pin <0=>PC10
 #define RTE_UART4_TX_ID                 0
 #if    (RTE_UART4_TX_ID == 0)
-#define RTE_UART4_TX                    0
-#elif  (RTE_UART4_TX_ID == 1)
-#define RTE_UART4_TX                    1
 #define RTE_UART4_TX_PORT               GPIOC
 #define RTE_UART4_TX_BIT                10
 #else
 #error "Invalid UART4_TX Pin Configuration!"
 #endif
 
-//   <o> UART4_RX Pin <0=>Not Used <1=>PC11
+//   <o> UART4_RX Pin <0=>PC11
 #define RTE_UART4_RX_ID                 0
 #if    (RTE_UART4_RX_ID == 0)
-#define RTE_UART4_RX                    0
-#elif  (RTE_UART4_RX_ID == 1)
-#define RTE_UART4_RX                    1
 #define RTE_UART4_RX_PORT               GPIOC
 #define RTE_UART4_RX_BIT                11
 #else
@@ -708,24 +631,18 @@
 #define RTE_UART5                       0
 #define RTE_UART5_AF_REMAP              AFIO_UNAVAILABLE_REMAP
 
-//   <o> UART5_TX Pin <0=>Not Used <1=>PC12
+//   <o> UART5_TX Pin <0=>PC12
 #define RTE_UART5_TX_ID                 0
 #if    (RTE_UART5_TX_ID == 0)
-#define RTE_UART5_TX                    0
-#elif  (RTE_UART5_TX_ID == 1)
-#define RTE_UART5_TX                    1
 #define RTE_UART5_TX_PORT               GPIOC
 #define RTE_UART5_TX_BIT                12
 #else
 #error "Invalid UART5_TX Pin Configuration!"
 #endif
 
-//   <o> UART5_RX Pin <0=>Not Used <1=>PD2
+//   <o> UART5_RX Pin <0=>PD2
 #define RTE_UART5_RX_ID                 0
 #if    (RTE_UART5_RX_ID == 0)
-#define RTE_UART5_RX                    0
-#elif  (RTE_UART5_RX_ID == 1)
-#define RTE_UART5_RX                    1
 #define RTE_UART5_RX_PORT               GPIOD
 #define RTE_UART5_RX_BIT                2
 #else
