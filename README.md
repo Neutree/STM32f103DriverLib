@@ -25,6 +25,10 @@ _ _ _
   * 然后看Main.cpp中硬件定义及其参数,每个外设驱动都有一个文件，具体每个外设驱动的使用请看其头文件。
 
 # 规范
+## 文件编码格式
+UTF-8 without signature
+> keil->edit->configuration->editor->encoding
+ 
 ## 目录规范
 
 `lib`：驱动库目录
@@ -74,3 +78,12 @@ _ _ _
 
 ## 代码风格
 看[这里](https://github.com/neutree/simple-code-conventions)
+
+# 贡献者
+[AllenWang](https://github.com/afshare)
+Danyuanhong
+[infiniteYuan](https://github.com/InfiniteYuan1)
+[lissettecarlr](https://github.com/lissettecarlr)
+[neucrack](http://neucrack.com)
+[xz1996](http://git.oschina.net/xz1996)
+
