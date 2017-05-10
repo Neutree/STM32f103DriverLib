@@ -81,9 +81,14 @@ UTF-8 without signature
 
 # 贡献者
 [AllenWang](https://github.com/afshare)
+
 Danyuanhong
+
 [infiniteYuan](https://github.com/InfiniteYuan1)
+
 [lissettecarlr](https://github.com/lissettecarlr)
+
 [neucrack](http://neucrack.com)
+
 [xz1996](http://git.oschina.net/xz1996)
 
