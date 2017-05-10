@@ -30,5 +30,7 @@ JLinkSettings.ini
 *.uvoptx
 *.*.bak
 
+*.dbgconf
+
 
 ProjectTemplate
