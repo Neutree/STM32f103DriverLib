@@ -6,7 +6,7 @@
 ///@param highLevelOn  是否输出高电平时为LED打开
 /////////////////////////
 LED::LED(GPIO &gpio,bool highLevelOn)
-	:mGPIO(gpio)
+	:mGPIO(gpio),times(0),time_old(0)
 {
 	if(highLevelOn)
 		mLevelOn=1;
@@ -61,13 +61,11 @@ void LED::Blink(uint16_t time,float interval,bool wait)
 		}
 		return;
 	}
-	static uint16_t times = 0;
 	if(time!=0 && times>=time)
 	{
 		times = 0;
 		return;
 	}
-	static double time_old = 0;
 	if(TaskManager::Time() - time_old > interval)
 	{
 		time_old = TaskManager::Time();

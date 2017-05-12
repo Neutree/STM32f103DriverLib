@@ -65,7 +65,9 @@ class LED
 		///标志开启LED时取的电平高低
 		////////////////////////
 		unsigned char mLevelOn;
-
+	
+		uint16_t times;
+		double time_old;
 	
 	
 	
