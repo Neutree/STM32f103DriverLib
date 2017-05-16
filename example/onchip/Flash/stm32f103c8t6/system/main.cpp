@@ -23,13 +23,13 @@ int main()
 	com<<"clear flash block\n";
 	store.Clear(0);
 	
-	store.Read(0,0,(u16*)&dataToStore2,sizeof(dataToStore));
+	store.Read(0,0,(u16*)&dataToStore2,sizeof(dataToStore)/2);
 	com<<"value before write:a:"<<dataToStore2.a<<"\tb:"<<dataToStore2.b<<"\tc:"<<dataToStore2.c<<"\td:"<<dataToStore2.d<<"\n";
 	
 	com<<"write value to flash:a:"<<dataToStore.a<<"\tb:"<<dataToStore.b<<"\tc:"<<dataToStore.c<<"\td:"<<dataToStore.d<<"\n";
-	store.Write(0,0,((u16*)&dataToStore),sizeof(dataToStore));
+	store.Write(0,0,((u16*)&dataToStore),sizeof(dataToStore)/2);
 	
-	store.Read(0,0,(u16*)&dataToStore2,sizeof(dataToStore));
+	store.Read(0,0,(u16*)&dataToStore2,sizeof(dataToStore)/2);
 	com<<"value after write:a:"<<dataToStore2.a<<"\tb:"<<dataToStore2.b<<"\tc:"<<dataToStore2.c<<"\td:"<<dataToStore2.d<<"\n";
 	
 	if(dataToStore.a==dataToStore2.a &&
