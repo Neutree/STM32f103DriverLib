@@ -176,7 +176,7 @@ bool FIFOBuffer<T,MAX_SIZE>::Gets(T *pData, u16 num)
 template<typename T, u16 MAX_SIZE>
 u16 FIFOBuffer<T,MAX_SIZE>::Size()
 {
-	return (mRear - mFront)%MAX_SIZE;
+	return (mRear - mFront+MAX_SIZE)%MAX_SIZE;
 }
 
 /**
