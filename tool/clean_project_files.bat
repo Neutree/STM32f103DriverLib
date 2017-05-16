@@ -31,3 +31,8 @@ del  *.lst  /s
 del  *.map  /s
 
 del  *.hex  /s
+del RTE_Device.h.000* /s
+
+# delete empty folders
+for /f "delims=" %%a in ('dir . /b /ad /s ^|sort /r' ) do rd /q "%%a" 2>nul
+
