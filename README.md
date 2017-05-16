@@ -17,8 +17,11 @@ _ _ _
 _ _ _
 # 如何使用
 
-1. 克隆项目到本地目录
-2. 复制一个副本
+1. windows上安装keil MDK 5
+2. 克隆(推荐)或者下载项目到本地目录,复制一个副本
+```
+git clone https://github.com/Neutree/STM32f103DriverLib.git
+```
 3. 打开/template文件夹，该文件夹下面会有相应IDE的工程模板，直接打开运行即可（onchip表示只有STM32片上驱动，offchip表示有一些常用模块的驱动）
 4. 需要关心的文件主要在工程的app文件夹下，有三个文件，Main.cpp,Configuration.h,UserInterrupt.cpp.分别为主函数所在、配置使用哪些资源，中断用户程序。
   * 首先检查Configuration.h中需要使用的资源是否取消注释了，不需要使用的资源是否注释了
