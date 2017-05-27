@@ -32,45 +32,38 @@ unsigned int Socket_esp8266::Read(char* data)
 	unsigned char temp[13];
 	unsigned short bufferSize=0;
 	unsigned short dataLength=0;
-	unsigned short count=0;
-	bool flag = false;
+	short count=0;
+	uint8_t headFlag=0;
 	//读出数据长度
 	while(TaskManager::Time()-starttime<mTimeOut){
 		bufferSize = mUsart.ReceiveBufferSize();
-		if(bufferSize>6)//数据帧格式：+IPD,长度:数据
+		if(bufferSize>0)
 		{
-			for(count=0;count<bufferSize&&count<ESP8266_RECEIVE_BUFFER_SIZE;++count)
+			mUsart.GetReceivedData(temp,1);
+			if(temp[0] == '+')
+				headFlag = 1;
+			else if(temp[0] == 'I' && headFlag == 1)
+				headFlag = 2;
+			else if(temp[0] == 'P' && headFlag == 2)
+				headFlag = 3;
+			else if(temp[0] == 'D' && headFlag == 3)
+				headFlag = 4;
+			else if(temp[0] == ',' && headFlag == 4)
 			{
-				mUsart.GetReceivedData(temp,1);
-				if(temp[0]=='+')
+				if(mIsEnableMUX)
+					mUsart.GetReceivedData(temp,2);
+				headFlag = 5;
+			}
+			else if(headFlag == 5)
+			{
+				if(temp[0] == ':')
 				{
-					if(!mIsEnableMUX)
-						RecvFindAndFilter(":",",",":",(char*)temp,mTimeOut);
-					else
-					{
-						if(RecvFind(":",mTimeOut))
-						{
-							char* index1=strstr(mReceiveBuffer,",");
-							index1=strstr(index1,",");
-							char* index2=strstr(mReceiveBuffer,":");
-
-							if(index1&&index2)
-							{
-								index1+=strlen(",");
-								*index2='\0';
-								strcpy((char*)temp,index1);
-								return true;
-							}
-						}
-					}
-					dataLength = atoi((char*)temp);
-					flag = true;
 					break;
 				}
+				else
+					dataLength = dataLength*10+(temp[0]-'0');
 			}
 		}
-		if(flag)
-			break;
 	}
 	count=0;
 	//读取数据
