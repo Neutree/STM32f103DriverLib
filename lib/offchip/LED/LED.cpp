@@ -54,9 +54,7 @@ void LED::Blink(uint16_t time,float interval,bool wait)
 	if(wait){
 		for(uint8_t i=0;i<time;++i)
 		{
-			On();
-			TaskManager::DelayMs(interval);
-			Off();
+			Toggle();
 			TaskManager::DelayMs(interval);
 		}
 		return;
@@ -66,7 +64,7 @@ void LED::Blink(uint16_t time,float interval,bool wait)
 		times = 0;
 		return;
 	}
-	if(TaskManager::Time() - time_old > interval)
+	if(TaskManager::Time() - time_old > interval/1000.0)
 	{
 		time_old = TaskManager::Time();
 		++times;
