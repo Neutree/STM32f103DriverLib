@@ -41,9 +41,7 @@ class esp8266
 	 * @warning parameter baud depends on the AT firmware. 9600 is an common value. 
 	 */
 	esp8266(USART &usart, uint32_t baudRate = 0 );
-	
-	void ClearBuffer();
-	
+		
     bool Kick(void);
     bool Restart(void);
     bool GetVersion(char*);
@@ -65,7 +63,7 @@ private:
 		
 	USART &mUsart;
 	unsigned int mReceiveBufferIndex;
-
+	void ClearBuffer();
 	bool ReceiveAndWait(char const* targetString,unsigned char timeOut=ESP8266_DEFAULT_TIMEOUT);
 	bool ReceiveAndWait(char const* targetString,char const* targetString2,unsigned char timeOut=ESP8266_DEFAULT_TIMEOUT);
 	bool ReceiveAndWait(char const* targetString,char const* targetString2,char const* targetString3,unsigned char timeOut=ESP8266_DEFAULT_TIMEOUT);
