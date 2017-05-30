@@ -560,6 +560,34 @@ USART& USART::operator<<(double val)
 	SendData(data+20-len,len);
 	return *this;
 }
+USART& USART::PrintHex(uint8_t *pbuffer, uint32_t size,const char* str)
+{
+	uint32_t i=0;
+	for(;i<size-1;++i)
+	{
+		PrintHex(pbuffer[i]);
+		SendData((uint8_t*)str,strlen(str));
+	}
+	PrintHex(pbuffer[i]);
+	return *this;
+}
+USART& USART::PrintHex(uint8_t data)
+{
+	uint8_t temp[2];
+	temp[0]=data>>4&0x0f;
+	temp[1]=data&0x0f;
+	if(temp[0]<10)
+		temp[0]+='0';
+	else
+		temp[0] = temp[0] -10 + 'A';
+	if(temp[1]<10)
+		temp[1]+='0';
+	else
+		temp[1] = temp[1] -10 + 'A';
+	SendData(temp,2);
+	return *this;
+}
+
 
 USART& USART::Setprecision(const unsigned char precision)
 {
