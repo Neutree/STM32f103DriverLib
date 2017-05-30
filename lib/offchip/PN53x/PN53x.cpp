@@ -138,3 +138,196 @@ bool  PN53x::PcdListPassiveTarget(uint16_t* type, uint8_t* uid,uint8_t* sak,uint
 
 
 
+/**
+  *@param uid: 4bytes
+  *@param key: 6 bytes, default value: ff ff ff ff ff ff
+	*/
+bool  PN53x::PcdVerifyKeyA(uint8_t* uid,uint8_t* key)
+{
+//00 00 FF 0F F1 D4 40 01 60 03 FF FF FF FF FF FF UID1 UID2 UID3 UID4 2A 00
+//00 00 FF 0F F1 D4 40 01 60 03 FF FF FF FF FF FF 94 8A 3B 0B 2A 00
+    u8 data[22];
+    data[0]=0x00;
+    data[1]=0x00;
+    data[2]=0xFF;
+    
+    data[3]=0x0F;
+    data[4]=0xF1; 
+    
+    data[5]=0xD4;
+    data[6]=0x40;
+    
+    data[7]=0x01;
+    data[8]=0x60;
+    data[9]=0x03; 
+    
+		for(uint8_t i=0;i<6;++i)
+			data[i+10] = key[i];
+    
+    data[16]=uid[0];
+    data[17]=uid[1];
+    data[18]=uid[2];
+    data[19]=uid[3];
+    
+		u8 temp=0,i;
+    for(i=5;i<20;i++)
+    {
+        temp+=data[i];
+    }
+
+    data[20]=0x100-temp;
+    
+    data[21]=0x00;
+    mUsart.ClearReceiveBuffer();
+    mUsart.SendData(data,22);
+		bool flag =false;
+		float time = TaskManager::Time();
+		while(1)//00 00 FF 00 FF 00 00 00 FF 03 FD    D5 41 00 EA 00
+		{
+			if(!flag)
+			{
+				if(mUsart.ReceiveBufferSize() >= 11)
+				{
+					mUsart.GetReceivedData(data,11);
+					if(! (data[0]==0&&data[1]==0&&data[2]==0xff&&data[3]==0&&data[4]==0xff&&data[5]==0) )
+						return false;
+					flag = true;
+				}
+			}
+			else
+			{
+				if(mUsart.ReceiveBufferSize()>=5)
+				{
+					mUsart.GetReceivedData(data,5);
+					if(0x100-((data[0]+data[1]+data[2])&0xff) == data[3])
+						return true;
+					return false;
+				}
+			}
+			if(TaskManager::Time()-time>MAX_WAIT_TIME_OUT)
+				return false;
+		}
+}
+
+//00 00 FF 05 FB D4 40 01 30 02 B9 00
+bool  PN53x::PcdRead(uint8_t* dataRead,uint8_t blockNumber)
+{
+		if(blockNumber>3)
+			return false;
+    u8 data[21];
+    data[0]=0x00;
+    data[1]=0x00;
+    data[2]=0xFF;
+    
+    data[3]=0x05; 
+    data[4]=0xFB; 
+    
+    data[5]=0xD4; 
+    data[6]=0x40; 
+    
+    data[7]=0x01;
+    data[8]=0x30;
+    data[9]=blockNumber; 
+    
+    data[10]=0x100-((data[5]+data[6]+data[7]+data[8]+data[9])&0xff);
+    data[11]=0x00;
+
+		mUsart.ClearReceiveBuffer();
+		mUsart.SendData(data,12);
+
+		bool flag =false;
+		float time = TaskManager::Time();
+		while(1)//00 00 FF 00 FF 00 00 00 FF 13 ED     D5 41 00 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 72 00
+		{
+			if(!flag)
+			{
+				if(mUsart.ReceiveBufferSize() >= 11)
+				{
+					mUsart.GetReceivedData(data,11);
+					if(! (data[0]==0&&data[1]==0&&data[2]==0xff&&data[3]==0&&data[4]==0xff&&data[5]==0) )
+						return false;
+					flag = true;
+				}
+			}
+			else
+			{
+				if(mUsart.ReceiveBufferSize()>=21)
+				{
+					mUsart.GetReceivedData(data,21);
+					uint8_t sum=0;
+					for(uint8_t i=0;i<19;++i)
+						sum+=data[i];
+					if(0x100-sum != data[19])
+						return false;
+					memcpy(dataRead,data+3,16);
+					return true;
+				}
+			}
+			if(TaskManager::Time()-time>MAX_WAIT_TIME_OUT)
+				return false;
+		}
+}
+
+//00 00 FF 15 EB D4 40 01 A0 02 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F D1 00
+bool  PN53x::PcdWrite(uint8_t* dataWrite,uint8_t blockNumber)
+{
+    u8 data[28];
+    
+    data[0]=0x00;
+    data[1]=0x00;
+    data[2]=0xFF;
+    
+    data[3]=0x15;
+    data[4]=0xEB;
+                 
+    data[5]=0xD4;
+    data[6]=0x40;
+                 
+    data[7]=0x01;
+    data[8]=0xA0;
+    data[9]=blockNumber;
+    
+		for(uint8_t i=0;i<16;++i)
+			data[i+10] = dataWrite[i];
+    uint8_t sum=0;
+    for(uint8_t i=5;i<26;i++)
+    {
+        sum+=data[i];
+    }
+    data[26]=0x100-sum;
+    data[27]=0x00;
+
+		mUsart.ClearReceiveBuffer();
+		mUsart.SendData(data,28);
+  		bool flag =false;
+		float time = TaskManager::Time();
+		while(1)//00 00 FF 00 FF 00 00 00 FF 03 FD      D5 41 00 EA 00
+		{
+			if(!flag)
+			{
+				if(mUsart.ReceiveBufferSize() >= 11)
+				{
+					mUsart.GetReceivedData(data,11);
+					if(! (data[0]==0&&data[1]==0&&data[2]==0xff&&data[3]==0&&data[4]==0xff&&data[5]==0) )
+						return false;
+					flag = true;
+				}
+			}
+			else
+			{
+				if(mUsart.ReceiveBufferSize()>=5)
+				{
+					mUsart.GetReceivedData(data,5);
+					if(0x100-((data[0]+data[1]+data[2])&0xff) == data[3])
+						return true;
+					return false;
+				}
+			}
+			if(TaskManager::Time()-time>MAX_WAIT_TIME_OUT)
+				return false;
+		}
+}
+
+
+
+
