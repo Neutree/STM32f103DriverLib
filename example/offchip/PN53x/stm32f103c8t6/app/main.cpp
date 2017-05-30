@@ -13,7 +13,7 @@ LED led(gpioLed);
 
 uint8_t key[6]={0xff,0xff,0xff,0xff,0xff,0xff};
 uint8_t dataRead[16] = {0};
-uint8_t dataWrite[16] = {1,2,3,4,5,6,7,8,9,0,0,0,0,0,0,0};
+uint8_t dataWrite[16] = {0,0,0,0,5,6,7,8,9,0,0,0,0,0,0,0};
 
 int main()
 {
@@ -34,6 +34,7 @@ int main()
 			{
 				LOG<<"auth success!\n";
 				memcpy(dataWrite+12,uid,4);
+				memcpy(dataWrite,uid,4);
 				if(rfidReader.PcdWrite(dataWrite))
 				{
 					LOG<<"write success:";
