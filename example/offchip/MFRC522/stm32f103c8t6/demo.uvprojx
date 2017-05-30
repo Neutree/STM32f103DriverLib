@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\lib\onchip\USART;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\math;..\..\..\..\lib\onchip\interrupt;.\app</IncludePath>
+              <IncludePath>..\..\..\..\lib\onchip\USART;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\math;..\..\..\..\lib\onchip\interrupt;.\app;..\..\..\..\lib\offchip\LED;..\..\..\..\lib\offchip\MFRC522;..\..\..\..\lib\onchip\SPI;..\..\..\..\lib\onchip\taskManager</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -430,6 +430,26 @@
               <FileName>GPIO.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\..\lib\onchip\GPIO\GPIO.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>LED.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\LED\LED.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>MFRC522.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\MFRC522\MFRC522.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SPI.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\SPI\SPI.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TaskManager.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\taskManager\TaskManager.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -510,6 +530,12 @@
       </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="RCC" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH">
         <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.0.0"/>
+        <targetInfos>
+          <targetInfo name="demo"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="SPI" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH RCC">
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
           <targetInfo name="demo"/>
         </targetInfos>
