@@ -146,20 +146,20 @@ u8 mpu6050::Update(bool wait,Vector3<int> *acc, Vector3<int> *gyro)
 	
 	mI2C->AddCommand(MPU6050_ADDRESS,ACCEL_XOUT_H,0,0,&mData.acc_XH,14,true,this);//获取IMU加速度、角速度、IMU温度计数值
 	/*mI2C->AddCommand(MPU6050_ADDRESS,CONFIG,0,0,&mRegisterConfig,1);//获取CONFIGH寄存器状态 无法读取，虽然手册上写的可读可写 */
-	mI2C->AddCommand(MPU6050_ADDRESS,0x75,0,0,&mWhoAmI,1);//获取who am i ，检测mpu是否存在
+	// mI2C->AddCommand(MPU6050_ADDRESS,0x75,0,0,&mWhoAmI,1);//获取who am i ，检测mpu是否存在
 	if(!mI2C->StartCMDQueue())
 	{
 		mI2C->Init();
 		this->Init(wait);
 		return MOD_ERROR;
 	}
-	if(GetHealth()==2)//未初始化状态
-	{
-		if(!this->Init(wait))//iic总线错误
-		{
-			return MOD_ERROR;
-		}
-	}
+	// if(GetHealth()==2)//未初始化状态
+	// {
+	// 	if(!this->Init(wait))//iic总线错误
+	// 	{
+	// 		return MOD_ERROR;
+	// 	}
+	// }
 	//如果需要等待
 	if(wait)
 		if(!mI2C->WaitTransmitComplete(true,true,false))
