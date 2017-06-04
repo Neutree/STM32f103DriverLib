@@ -14,7 +14,7 @@ u8 mpu6050::Init(bool wait)
 	mI2C->AddCommand(MPU6050_ADDRESS,SMPLRT_DIV,&IIC_Write_Temp,1,0,0);
 	IIC_Write_Temp=7;
 	mI2C->AddCommand(MPU6050_ADDRESS,USER_CTRL,&IIC_Write_Temp,1,0,0);
-	IIC_Write_Temp=6;
+	IIC_Write_Temp=0;
 	mI2C->AddCommand(MPU6050_ADDRESS,CONFIG,&IIC_Write_Temp,1,0,0);
 	IIC_Write_Temp=0x00;
 	mI2C->AddCommand(MPU6050_ADDRESS,GYRO_CONFIG,&IIC_Write_Temp,1,0,0);//+-250 °/s
