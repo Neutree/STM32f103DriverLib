@@ -11,15 +11,15 @@ u8 mpu6050::Init(bool wait)
 	IIC_Write_Temp=2;
 	mI2C->AddCommand(MPU6050_ADDRESS,INT_PIN_CFG,&IIC_Write_Temp,1,0,0);
 	IIC_Write_Temp=7;
-	mI2C->AddCommand(MPU6050_ADDRESS,SMPLRT_DIV,&IIC_Write_Temp,1,0,0);
-	IIC_Write_Temp=7;
 	mI2C->AddCommand(MPU6050_ADDRESS,USER_CTRL,&IIC_Write_Temp,1,0,0);
-	IIC_Write_Temp=0;
+	IIC_Write_Temp=0;//Disable DLPF(acc output frequency:1KHz,gyro:8kHz)
 	mI2C->AddCommand(MPU6050_ADDRESS,CONFIG,&IIC_Write_Temp,1,0,0);
-	IIC_Write_Temp=0x00;
-	mI2C->AddCommand(MPU6050_ADDRESS,GYRO_CONFIG,&IIC_Write_Temp,1,0,0);//+-250 °/s
-	IIC_Write_Temp=1;
-	mI2C->AddCommand(MPU6050_ADDRESS,ACCEL_CONFIG,&IIC_Write_Temp,1,0,0);//+-2g   5Hz
+	IIC_Write_Temp=7;//Sample Rate = Gyroscope Output Rate / (1 + SMPLRT_DIV)=(8k/8)Hz=1kHz
+	mI2C->AddCommand(MPU6050_ADDRESS,SMPLRT_DIV,&IIC_Write_Temp,1,0,0);
+	IIC_Write_Temp=0x00;//+-250 °/s
+	mI2C->AddCommand(MPU6050_ADDRESS,GYRO_CONFIG,&IIC_Write_Temp,1,0,0);
+	IIC_Write_Temp=1;//+-2g   high pass filter:5Hz
+	mI2C->AddCommand(MPU6050_ADDRESS,ACCEL_CONFIG,&IIC_Write_Temp,1,0,0);
 	
 	mI2C->StartCMDQueue();//开始执行命令
 	BypassMode();
