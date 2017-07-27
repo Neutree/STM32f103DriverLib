@@ -9,7 +9,7 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-USART com(2,115200,false);
+USART com(1,115200,false);
 
 GPIO ledRedGPIO(GPIOC,13,GPIO_Mode_Out_PP,GPIO_Speed_50MHz);//LED GPIO
 LED ledRed(ledRedGPIO);//LED red
