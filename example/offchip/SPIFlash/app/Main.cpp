@@ -39,7 +39,7 @@ bool IsPowerOn(void);
 int main()
 {
 	ledRed.On();
-	com<<"\n\n\nSend test times to start program, Use spaces to separate and end with '\r\n'\n[erase full chip?(0,1)] [random times(>=0)] [power cut times(>=0)] [erase write times(>=0)] [test all times>=0] [flash size(>0MBytes)] \n\
+	com<<"\n\n\nSend test times to start program, Use spaces to separate and end with '\\r\\n'\n[erase full chip?(0,1)] [random times(>=0)] [power cut times(>=0)] [erase write times(>=0)] [test all times>=0] [flash size(>0MBytes)] \n\
 eg:1 10 10 10 2 4\r\n";
 	u8 index = 0;
 	while(1)
