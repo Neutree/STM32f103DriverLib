@@ -1,6 +1,19 @@
 
 #include "Interrupt.h"
 
+/*CAN**************************************************************************/
+#ifdef USE_CAN
+CAN *pCAN = 0;
+#endif
+
+void USB_LP_CAN1_RX0_IRQHandler(void)
+{
+ #ifdef USE_CAN
+	 pCAN->Irq();
+ #endif
+}
+/*CAN END**********************************************************************/
+
 
 /*USART*************************************************************************/
 #ifdef USE_USART1
@@ -14,6 +27,7 @@ USART *pUSART2 = 0;
 #ifdef USE_USART3
 USART *pUSART3 = 0;
 #endif
+
 
 void USART1_IRQHandler(void)    //----USART1 IRQ----//
 {
