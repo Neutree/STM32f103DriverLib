@@ -11,15 +11,15 @@ u8 mpu6050::Init(bool wait)
 	IIC_Write_Temp=2;
 	mI2C->AddCommand(MPU6050_ADDRESS,INT_PIN_CFG,&IIC_Write_Temp,1,0,0);
 	IIC_Write_Temp=7;
-	mI2C->AddCommand(MPU6050_ADDRESS,SMPLRT_DIV,&IIC_Write_Temp,1,0,0);
-	IIC_Write_Temp=7;
 	mI2C->AddCommand(MPU6050_ADDRESS,USER_CTRL,&IIC_Write_Temp,1,0,0);
-	IIC_Write_Temp=6;
+	IIC_Write_Temp=0;//Disable DLPF(acc output frequency:1KHz,gyro:8kHz)
 	mI2C->AddCommand(MPU6050_ADDRESS,CONFIG,&IIC_Write_Temp,1,0,0);
-	IIC_Write_Temp=0x00;
-	mI2C->AddCommand(MPU6050_ADDRESS,GYRO_CONFIG,&IIC_Write_Temp,1,0,0);//+-250 °/s
-	IIC_Write_Temp=1;
-	mI2C->AddCommand(MPU6050_ADDRESS,ACCEL_CONFIG,&IIC_Write_Temp,1,0,0);//+-2g   5Hz
+	IIC_Write_Temp=7;//Sample Rate = Gyroscope Output Rate / (1 + SMPLRT_DIV)=(8k/8)Hz=1kHz
+	mI2C->AddCommand(MPU6050_ADDRESS,SMPLRT_DIV,&IIC_Write_Temp,1,0,0);
+	IIC_Write_Temp=0x00;//+-250 °/s
+	mI2C->AddCommand(MPU6050_ADDRESS,GYRO_CONFIG,&IIC_Write_Temp,1,0,0);
+	IIC_Write_Temp=1;//+-2g   high pass filter:5Hz
+	mI2C->AddCommand(MPU6050_ADDRESS,ACCEL_CONFIG,&IIC_Write_Temp,1,0,0);
 	
 	mI2C->StartCMDQueue();//开始执行命令
 	BypassMode();
@@ -146,20 +146,20 @@ u8 mpu6050::Update(bool wait,Vector3<int> *acc, Vector3<int> *gyro)
 	
 	mI2C->AddCommand(MPU6050_ADDRESS,ACCEL_XOUT_H,0,0,&mData.acc_XH,14,true,this);//获取IMU加速度、角速度、IMU温度计数值
 	/*mI2C->AddCommand(MPU6050_ADDRESS,CONFIG,0,0,&mRegisterConfig,1);//获取CONFIGH寄存器状态 无法读取，虽然手册上写的可读可写 */
-	mI2C->AddCommand(MPU6050_ADDRESS,0x75,0,0,&mWhoAmI,1);//获取who am i ，检测mpu是否存在
+	// mI2C->AddCommand(MPU6050_ADDRESS,0x75,0,0,&mWhoAmI,1);//获取who am i ，检测mpu是否存在
 	if(!mI2C->StartCMDQueue())
 	{
 		mI2C->Init();
 		this->Init(wait);
 		return MOD_ERROR;
 	}
-	if(GetHealth()==2)//未初始化状态
-	{
-		if(!this->Init(wait))//iic总线错误
-		{
-			return MOD_ERROR;
-		}
-	}
+	// if(GetHealth()==2)//未初始化状态
+	// {
+	// 	if(!this->Init(wait))//iic总线错误
+	// 	{
+	// 		return MOD_ERROR;
+	// 	}
+	// }
 	//如果需要等待
 	if(wait)
 		if(!mI2C->WaitTransmitComplete(true,true,false))

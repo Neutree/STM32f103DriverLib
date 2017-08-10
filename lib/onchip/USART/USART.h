@@ -20,6 +20,7 @@
 #include "stm32f10x_gpio.h"
 #include "FIFOBuffer.h"
 #include "GPIO.h"
+#include "string.h"
 
 
 
@@ -108,6 +109,9 @@ public:
 	///////////////////
 	bool SendData(uint8_t *pbuffer, uint32_t size);
 
+	USART& PrintHex(uint8_t *pbuffer, uint32_t size,const char* str);
+	USART& PrintHex(uint8_t pbuffer);
+
 
 	///////////////////
 	///@brief 获取缓冲区中的数据
@@ -180,6 +184,7 @@ public:
 	///@brief print double reload
 	/////////////////////////////
 	USART& operator<<(double val);
+	
 	
 	////////////////////////////
 	///set the precision of double output

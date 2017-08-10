@@ -127,11 +127,8 @@ bool esp8266::JoinAP(char* apJoinSsid,char* apJoinPasswd,esp8266_pattern pattern
 		mUsart<<"AT+CWJAP=";
 	}
 	mUsart<<"\""<<apJoinSsid<<"\",\""<<apJoinPasswd<<"\"\r\n";
-	if(!ReceiveAndWait("OK", "ERROR",20))
-		return false;
-	if(strstr(mReceiveBuffer,"OK"))
-		return true;
-	return false;
+	bool flag = RecvFind("OK\r\n","ERROR",20);
+	return flag;
 }
 
 bool esp8266::CreateConnectMutipleMode(char* ipAddr,short port,Socket_Type socketType, signed char muxID)
@@ -146,7 +143,7 @@ bool esp8266::CreateConnectMutipleMode(char* ipAddr,short port,Socket_Type socke
 		mUsart<<"AT+CIPSTART="<<muxID<<",\""<<type<<"\",\""<<ipAddr<<"\","<<port<<"\r\n";							
 	else
 		mUsart<<"AT+CIPSTART="<<"\""<<type<<"\",\""<<ipAddr<<"\","<<port<<"\r\n";							
-	return RecvFind("OK","ERROR","ALREAY CONNECT");
+	return RecvFind("OK","ERROR","ALREAY CONNECT",5);
 }
 bool esp8266::SendMultipleMode(char* data, unsigned int num,signed char muxID)
 {
@@ -206,8 +203,12 @@ bool esp8266::ReceiveAndWait(const char* targetString,unsigned char timeOut)
 				mUsart.GetReceivedData(&temp,1);//从串口接收缓冲区接收数据
 				if(temp=='\0')
 					continue;
+				if(mReceiveBufferIndex==ESP8266_RECEIVE_BUFFER_SIZE-1)
+				{
+					memmove(mReceiveBuffer,mReceiveBuffer+20,ESP8266_RECEIVE_BUFFER_SIZE-20);
+					mReceiveBufferIndex-=20;
+				}
 				mReceiveBuffer[mReceiveBufferIndex++] = temp;//放入esp的缓冲区
-				
 			}
 			
 			if(strstr(mReceiveBuffer,targetString))
@@ -233,6 +234,11 @@ bool esp8266::ReceiveAndWait(char const* targetString,const char* targetString2,
 				mUsart.GetReceivedData(&temp,1);//从串口接收缓冲区接收数据
 				if(temp=='\0')
 					continue;
+				if(mReceiveBufferIndex==ESP8266_RECEIVE_BUFFER_SIZE-1)
+				{
+					memmove(mReceiveBuffer,mReceiveBuffer+20,ESP8266_RECEIVE_BUFFER_SIZE-20);
+					mReceiveBufferIndex-=20;
+				}
 				mReceiveBuffer[mReceiveBufferIndex++] = temp;//放入esp的缓冲区
 				
 			}
@@ -261,6 +267,11 @@ bool esp8266::ReceiveAndWait(char const* targetString,const char* targetString2,
 				mUsart.GetReceivedData(&temp,1);//从串口接收缓冲区接收数据
 				if(temp=='\0')
 					continue;
+				if(mReceiveBufferIndex==ESP8266_RECEIVE_BUFFER_SIZE-1)
+				{
+					memmove(mReceiveBuffer,mReceiveBuffer+20,ESP8266_RECEIVE_BUFFER_SIZE-20);
+					mReceiveBufferIndex-=20;
+				}
 				mReceiveBuffer[mReceiveBufferIndex++] = temp;//放入esp的缓冲区
 				
 			}

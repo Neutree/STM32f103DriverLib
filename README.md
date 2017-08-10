@@ -14,6 +14,8 @@ void main()
 ```
 
 _ _ _
+# Chat On Gitter
+[![Gitter](https://badges.gitter.im/Neutree/STM32f103DriverLib.svg)](https://gitter.im/STM32f103DriverLib/Lobby)
 _ _ _
 # 如何使用
 

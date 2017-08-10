@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>demo</TargetName>
+      <TargetName>Target 1</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
@@ -373,7 +373,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\lib\onchip\USART;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\math;..\..\..\..\lib\onchip\interrupt;..\..\..\..\lib\onchip\timer;.\system;..\..\..\..\lib\onchip\delay</IncludePath>
+              <IncludePath>..\..\..\lib\offchip\LED;..\..\..\lib\offchip\SPIFlash;..\..\..\lib\onchip\GPIO;..\..\..\lib\onchip\SPI;..\..\..\lib\onchip\taskManager;..\..\..\lib\onchip\USART;..\..\..\lib\math;.\app;..\..\..\lib\onchip\interrupt</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -414,27 +414,67 @@
       </TargetOption>
       <Groups>
         <Group>
-          <GroupName>lib</GroupName>
+          <GroupName>onchip</GroupName>
           <Files>
             <File>
               <FileName>GPIO.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\..\lib\onchip\GPIO\GPIO.cpp</FilePath>
+              <FilePath>..\..\..\lib\onchip\GPIO\GPIO.cpp</FilePath>
             </File>
             <File>
-              <FileName>Delay.cpp</FileName>
+              <FileName>SPI.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\..\lib\onchip\delay\Delay.cpp</FilePath>
+              <FilePath>..\..\..\lib\onchip\SPI\SPI.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>USART.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\lib\onchip\USART\USART.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>TaskManager.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\lib\onchip\taskManager\TaskManager.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Interrupt.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\lib\onchip\interrupt\Interrupt.cpp</FilePath>
             </File>
           </Files>
         </Group>
         <Group>
-          <GroupName>system</GroupName>
+          <GroupName>offchip</GroupName>
           <Files>
             <File>
-              <FileName>main.cpp</FileName>
+              <FileName>LED.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>.\system\main.cpp</FilePath>
+              <FilePath>..\..\..\lib\offchip\LED\LED.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>SPIFlash.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\lib\offchip\SPIFlash\SPIFlash.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>app</GroupName>
+          <Files>
+            <File>
+              <FileName>Main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\app\Main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Configuration.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\app\Configuration.h</FilePath>
+            </File>
+            <File>
+              <FileName>UserInterrupt.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\app\UserInterrupt.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -451,68 +491,68 @@
   <RTE>
     <apis/>
     <components>
-      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="3.40.0" condition="CMSIS Core">
-        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="4.2.0"/>
+      <component Cclass="CMSIS" Cgroup="CORE" Cvendor="ARM" Cversion="4.3.0" condition="Cortex-M Device">
+        <package name="CMSIS" schemaVersion="1.3" url="http://www.keil.com/pack/" vendor="ARM" version="4.5.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
-        </targetInfos>
-      </component>
-      <component Cclass="Device" Cgroup="GPIO" Cvendor="Keil" Cversion="1.2" condition="STM32F1xx CMSIS">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.1.0"/>
-        <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32F1xx CMSIS">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.1.0"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="DMA" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH RCC">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.1.0"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="EXTI" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH">
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
+        <targetInfos>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="Framework" Cvendor="Keil" Cversion="3.5.1" condition="STM32F1xx STDPERIPH">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.1.0"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="GPIO" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH RCC">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.1.0"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="RCC" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.1.0"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
-      <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="TIM" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH RCC">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.1.0"/>
+      <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="SPI" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH RCC">
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="USART" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH RCC">
-        <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.1.0"/>
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </component>
     </components>
     <files>
-      <file attr="config" category="header" name="RTE_Driver\Config\RTE_Device.h" version="1.1.1">
+      <file attr="config" category="header" name="RTE_Driver\Config\RTE_Device.h" version="1.1.2">
         <instance index="0">RTE\Device\STM32F103C8\RTE_Device.h</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32F1xx CMSIS"/>
         <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </file>
       <file attr="config" category="source" condition="STM32F1xx MD ARMCC" name="Device\Source\ARM\startup_stm32f10x_md.s" version="1.0.0">
@@ -520,7 +560,7 @@
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32F1xx CMSIS"/>
         <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </file>
       <file attr="config" category="source" name="Device\StdPeriph_Driver\templates\stm32f10x_conf.h" version="3.5.0">
@@ -528,7 +568,7 @@
         <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="Framework" Cvendor="Keil" Cversion="3.5.1" condition="STM32F1xx STDPERIPH"/>
         <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </file>
       <file attr="config" category="source" name="Device\Source\system_stm32f10x.c" version="1.0.0">
@@ -536,7 +576,7 @@
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="1.0.0" condition="STM32F1xx CMSIS"/>
         <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
-          <targetInfo name="demo"/>
+          <targetInfo name="Target 1"/>
         </targetInfos>
       </file>
     </files>

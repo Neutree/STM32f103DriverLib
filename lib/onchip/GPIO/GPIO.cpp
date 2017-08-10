@@ -13,12 +13,27 @@ GPIO::GPIO(GPIO_TypeDef *port,uint16_t pin,GPIOMode_TypeDef mode,GPIOSpeed_TypeD
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	RCC_Configuration();
+		
 	GPIO_InitStructure.GPIO_Pin=mPin[pin];
 	GPIO_InitStructure.GPIO_Speed=speed;
 	GPIO_InitStructure.GPIO_Mode=mode;
 	GPIO_Init(mPort,&GPIO_InitStructure);	
 }
 
+void GPIO::DisableSWJTAG(bool disableSW,bool disableJtag)
+{
+	uint8_t temp=0;
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO, ENABLE);
+	if(disableSW && disableJtag)
+		temp = 4;
+	else if(!disableSW && disableJtag)
+		temp = 2;
+	else
+		temp = 4;
+	GPIO_PinRemapConfig(0x00300000|(temp<<8),ENABLE);
+//		GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
+
+}
 
 //The function to configure the RCC of GPIO
 void GPIO::RCC_Configuration()

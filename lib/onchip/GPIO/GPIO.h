@@ -47,6 +47,11 @@ class GPIO
 		GPIO(GPIO_TypeDef *port=GPIOA,uint16_t pin=1,GPIOMode_TypeDef mode=GPIO_Mode_Out_PP,GPIOSpeed_TypeDef speed=GPIO_Speed_50MHz);
 	 
 		/**
+      * @brief disable jtag or sw if you want to use the io below:
+      * PB3:JTDO, PB4:JNTRST, PA15:JTDI,  PA13:JTCK/SWCLK, PA14:JTMS/SWDIO
+      */
+		void DisableSWJTAG(bool disableSW,bool disableJtag);
+		/**
 		*	@brief  Set the pin as high level or low level.
 		*	@param  level: The level you wan to set,type:unsigned char ,value:0 or 1
 		*/
