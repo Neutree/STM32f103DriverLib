@@ -332,7 +332,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,HARDWARE_USE_STM32F103DRIVERLIB</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\lib\onchip\USART;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\math;..\..\..\..\lib\onchip\interrupt;.\app;..\..\..\..\lib\onchip\taskManager;..\..\..\..\lib\onchip\SPI;..\..\..\..\lib\onchip\IWDG;..\..\..\..\lib\onchip\capture;..\..\..\..\lib\offchip\Ethernet3\src;..\..\..\..\lib\offchip\LED;..\..\..\..\lib\offchip\Ethernet3\src\utility</IncludePath>
+              <IncludePath>..\..\..\..\lib\onchip\USART;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\math;..\..\..\..\lib\onchip\interrupt;.\app;..\..\..\..\lib\onchip\taskManager;..\..\..\..\lib\onchip\SPI;..\..\..\..\lib\onchip\IWDG;..\..\..\..\lib\onchip\capture;..\..\..\..\lib\offchip\Ethernet\src;..\..\..\..\lib\offchip\LED;..\..\..\..\lib\offchip\Ethernet\src\utility</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -438,22 +438,17 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>ethernet</GroupName>
+          <GroupName>Ethernet</GroupName>
           <Files>
-            <File>
-              <FileName>socket.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\..\lib\offchip\Ethernet3\src\utility\socket.cpp</FilePath>
-            </File>
             <File>
               <FileName>w5500.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>..\..\..\..\lib\offchip\Ethernet3\src\utility\w5500.cpp</FilePath>
+              <FilePath>..\..\..\..\lib\offchip\Ethernet\src\utility\w5500.cpp</FilePath>
             </File>
             <File>
-              <FileName>w5500.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\..\..\..\lib\offchip\Ethernet3\src\utility\w5500.h</FilePath>
+              <FileName>socket.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\Ethernet\src\utility\socket.cpp</FilePath>
             </File>
           </Files>
         </Group>
