@@ -38,7 +38,6 @@ int main()
 	log.PrintHex(temp,6,":")<<"\n";
 	
 	w5500.getGatewayIp(temp);
-	log<<"gateway ip:";
 	log<<"gateway ip:"<<temp[0]<<"."<<temp[1]<<"."<<temp[2]<<"."<<temp[3]<<"\n";
 	
 	w5500.getIPAddress(temp);
@@ -136,8 +135,7 @@ int main()
 	log<<"gateway ip:"<<temp[0]<<"."<<temp[1]<<"."<<temp[2]<<"."<<temp[3]<<"\n";
 	
 	w5500.getIPAddress(temp);
-	log<<"local ip:";
-	log<<"gateway ip:"<<temp[0]<<"."<<temp[1]<<"."<<temp[2]<<"."<<temp[3]<<"\n";
+	log<<"local ip:"<<temp[0]<<"."<<temp[1]<<"."<<temp[2]<<"."<<temp[3]<<"\n";
 	
 	uint8_t ret = socket(sock,SnMR::TCP,local_port,0);
 	if(ret == 0)
