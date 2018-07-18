@@ -24,6 +24,8 @@
 #include <string.h>
 
 // A class to make it easier to handle and pass around IP addresses
+typedef uint8_t byte;
+
 
 class IPAddress  {
 private:
@@ -32,11 +34,7 @@ private:
 	uint32_t dword;
     } _address;
 
-    // Access the raw byte array containing the address.  Because this returns a pointer
-    // to the internal structure rather than a copy of the address this function should only
-    // be used when you know that the usage of the returned uint8_t* will be transient and not
-    // stored.
-    uint8_t* raw_address() { return _address.bytes; };
+    
 
 public:
     // Constructors
@@ -46,7 +44,7 @@ public:
     IPAddress(const uint8_t *address);
 
     bool fromString(const char *address);
-    bool fromString(const String &address) { return fromString(address.c_str()); }
+//    bool fromString(const String &address) { return fromString(address.c_str()); }
 
     // Overloaded cast operator to allow IPAddress objects to be used where a pointer
     // to a four-byte uint8_t array is expected
@@ -62,8 +60,13 @@ public:
     IPAddress& operator=(const uint8_t *address);
     IPAddress& operator=(uint32_t address);
 
-    virtual size_t printTo(Print& p) const;
-    String toString();
+    // virtual size_t printTo(Print& p) const;
+//    String toString();
+    // Access the raw byte array containing the address.  Because this returns a pointer
+    // to the internal structure rather than a copy of the address this function should only
+    // be used when you know that the usage of the returned uint8_t* will be transient and not
+    // stored.
+    uint8_t* raw_address() { return _address.bytes; };
 };
 
 const IPAddress INADDR_NONE(0,0,0,0);

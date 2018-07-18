@@ -332,7 +332,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_MD,HARDWARE_USE_STM32F103DRIVERLIB</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\..\..\lib\onchip\USART;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\math;..\..\..\..\lib\onchip\interrupt;.\app;..\..\..\..\lib\onchip\taskManager;..\..\..\..\lib\onchip\SPI;..\..\..\..\lib\onchip\IWDG;..\..\..\..\lib\onchip\capture;..\..\..\..\lib\offchip\Ethernet\src;..\..\..\..\lib\offchip\LED;..\..\..\..\lib\offchip\Ethernet\src\utility</IncludePath>
+              <IncludePath>..\..\..\..\lib\onchip\USART;..\..\..\..\lib\onchip\GPIO;..\..\..\..\lib\math;..\..\..\..\lib\onchip\interrupt;.\app;..\..\..\..\lib\onchip\taskManager;..\..\..\..\lib\onchip\SPI;..\..\..\..\lib\onchip\IWDG;..\..\..\..\lib\onchip\capture;..\..\..\..\lib\offchip\Ethernet\src;..\..\..\..\lib\offchip\LED;..\..\..\..\lib\offchip\Ethernet\src\utility;..\..\..\..\lib\onchip\delay</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -415,6 +415,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\..\lib\offchip\LED\LED.cpp</FilePath>
             </File>
+            <File>
+              <FileName>I2C.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\I2C\I2C.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Delay.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\onchip\delay\Delay.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -449,6 +459,31 @@
               <FileName>socket.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\..\lib\offchip\Ethernet\src\utility\socket.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>IPAddress.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\Ethernet\src\utility\IPAddress.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>EthernetUdp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\Ethernet\src\EthernetUdp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Dhcp.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\Ethernet\src\Dhcp.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Dns.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\Ethernet\src\Dns.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Ethernet_STM.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\Ethernet\src\Ethernet_STM.cpp</FilePath>
             </File>
           </Files>
         </Group>
@@ -503,6 +538,12 @@
       </component>
       <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="GPIO" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH RCC">
         <package name="STM32F1xx_DFP" schemaVersion="1.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.0.0"/>
+        <targetInfos>
+          <targetInfo name="demo"/>
+        </targetInfos>
+      </component>
+      <component Cclass="Device" Cgroup="StdPeriph Drivers" Csub="I2C" Cvendor="Keil" Cversion="3.5.0" condition="STM32F1xx STDPERIPH RCC">
+        <package name="STM32F1xx_DFP" schemaVersion="1.4.0" url="http://www.keil.com/pack/" vendor="Keil" version="2.2.0"/>
         <targetInfos>
           <targetInfo name="demo"/>
         </targetInfos>

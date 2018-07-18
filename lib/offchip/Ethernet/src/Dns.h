@@ -6,6 +6,7 @@
 #define DNSClient_h
 
 #include <EthernetUdp.h>
+#include "util.h"
 
 class DNSClient
 {

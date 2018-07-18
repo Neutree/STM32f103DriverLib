@@ -6,10 +6,10 @@
 #define ethernet_h
 
 #include <inttypes.h>
-#include "utility/w5100.h"
+#include "utility/w5500.h"
 #include "IPAddress.h"
 #include "EthernetClient.h"
-#include "EthernetServer.h"
+//#include "EthernetServer.h"
 #include "Dhcp.h"
 
 
@@ -52,7 +52,7 @@ public:
   IPAddress dnsServerIP();
 
   friend class EthernetClient;
-  friend class EthernetServer;
+//  friend class EthernetServer;
 };
 
 extern EthernetClass Ethernet;

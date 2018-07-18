@@ -1,13 +1,13 @@
 // DHCP Library v0.3 - April 25, 2009
 // Author: Jordan Terrell - blog.jordanterrell.com
 
-#include "utility/w5100.h"
+#include "utility/w5500.h"
 
 #include <string.h>
 #include <stdlib.h>
 #include "Dhcp.h"
-#include "Arduino.h"
 #include "utility/util.h"
+#include "math.h"
 
 int DhcpClass::beginWithDHCP(uint8_t *mac, unsigned long timeout, unsigned long responseTimeout)
 {
@@ -166,20 +166,20 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
     // siaddr: already zeroed
     // giaddr: already zeroed
 
-    //put data in W5100 transmit buffer
+    //put data in w5500 transmit buffer
     _dhcpUdpSocket.write(buffer, 28);
 
     memset(buffer, 0, 32); // clear local buffer
 
     memcpy(buffer, _dhcpMacAddr, 6); // chaddr
 
-    //put data in W5100 transmit buffer
+    //put data in w5500 transmit buffer
     _dhcpUdpSocket.write(buffer, 16);
 
     memset(buffer, 0, 32); // clear local buffer
 
     // leave zeroed out for sname && file
-    // put in W5100 transmit buffer x 6 (192 bytes)
+    // put in w5500 transmit buffer x 6 (192 bytes)
   
     for(int i = 0; i < 6; i++) {
         _dhcpUdpSocket.write(buffer, 32);
@@ -211,7 +211,7 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
     printByte((char*)&(buffer[26]), _dhcpMacAddr[4]);
     printByte((char*)&(buffer[28]), _dhcpMacAddr[5]);
 
-    //put data in W5100 transmit buffer
+    //put data in w5500 transmit buffer
     _dhcpUdpSocket.write(buffer, 30);
 
     if(messageType == DHCP_REQUEST)
@@ -230,7 +230,7 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
         buffer[10] = _dhcpDhcpServerIp[2];
         buffer[11] = _dhcpDhcpServerIp[3];
 
-        //put data in W5100 transmit buffer
+        //put data in w5500 transmit buffer
         _dhcpUdpSocket.write(buffer, 12);
     }
     
@@ -244,7 +244,7 @@ void DhcpClass::send_DHCP_MESSAGE(uint8_t messageType, uint16_t secondsElapsed)
     buffer[7] = dhcpT2value;
     buffer[8] = endOption;
     
-    //put data in W5100 transmit buffer
+    //put data in w5500 transmit buffer
     _dhcpUdpSocket.write(buffer, 9);
 
     _dhcpUdpSocket.endPacket();

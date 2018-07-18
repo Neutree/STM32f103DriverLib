@@ -1,7 +1,7 @@
 #ifndef ethernetclient_h
 #define ethernetclient_h
-#include "Arduino.h"	
-#include "Print.h"
+// #include "Arduino.h"	
+// #include "Print.h"
 #include "Client.h"
 #include "IPAddress.h"
 
@@ -29,7 +29,7 @@ public:
 
   friend class EthernetServer;
   
-  using Print::write;
+//  using Print::write;
 
 private:
   static uint16_t _srcport;
