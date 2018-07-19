@@ -18,9 +18,12 @@ class EthernetClass {
 private:
   IPAddress _dnsServerAddress;
   //DhcpClass* _dhcp;
+  GPIO* mResetPin;
 public:
   static uint8_t _state[MAX_SOCK_NUM];
   static uint16_t _server_port[MAX_SOCK_NUM];
+
+  void setResetPin(GPIO* gpio);
 
 #if defined(WIZ550io_WITH_MACADDRESS)
   // Initialize function when use the ioShield serise (included WIZ550io)

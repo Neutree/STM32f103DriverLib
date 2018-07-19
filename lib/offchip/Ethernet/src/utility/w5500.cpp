@@ -18,11 +18,26 @@ W5500Class w5500;
 SPI spi1(SPI1);
 SPI& W5500Class::mSpi = spi1;
 
-
-void W5500Class::init(void)
+void W5500Class::init()
 {
-    TaskManager::DelayMs(1000);
-    write(0x00, 0x05, 128); // Software reset the W5500 chip
+    init(NULL);
+}
+
+void W5500Class::init(GPIO* resetGpio)
+{
+    if(resetGpio == NULL)
+    {
+        TaskManager::DelayMs(1000);
+        write(0x00, 0x05, 128); // Software reset the W5500 chip
+    }
+    else
+    {
+        resetGpio->SetLevel(0);
+        TaskManager::DelayMs(50);
+        resetGpio->SetLevel(1);
+        TaskManager::DelayMs(50);
+        while((getPHYCFGR()&LINK) == 0);
+    }
     for (int i=0; i<MAX_SOCK_NUM; i++) {
         uint8_t cntl_byte = (0x0C + (i<<5));
     write( 0x1E, cntl_byte, RXBUF_SIZE); //0x1E - Sn_RXBUF_SIZE

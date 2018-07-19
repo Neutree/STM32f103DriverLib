@@ -6,6 +6,7 @@
 #include "IPAddress.h"
 #include "Ethernet_STM.h"
 #include "EthernetClient.h"
+#include "GPIO.h"
 
 USART log(3,115200,false,0,3,7,1,3);//
 uint8_t dataSend[9]={"abcdefg\n"};
@@ -198,12 +199,15 @@ IPAddress localIp(192,168,21,236);
 char serverAddr[] = "www.example.com"; 
 
 EthernetClient client;
+GPIO resetPin(GPIOA,3);
 
 int main()
 {
 	log<<"system start, initilize now\n";
 
 	log<<"Init ethernet...\n";
+	//use hardware reset pin
+	Ethernet.setResetPin(&resetPin);
 	 // start the Ethernet connection:
 #if defined(WIZ550io_WITH_MACADDRESS)
 	if (Ethernet.begin() == 0) {

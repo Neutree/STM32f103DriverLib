@@ -11,6 +11,7 @@
 #define	W5500_H_INCLUDED
 
 #include "SPI.h"
+#include "GPIO.h"
 
 /** Total RAM buffer is 16 kBytes for Transmitter and 16 kBytes for receiver for 1 Socket.
  *  The Total W5500 RAM buffer is 32 kBytes (16 + 16).
@@ -64,6 +65,13 @@ public:
   static inline uint8_t SOCK(SOCKET ch) { return (0x01 << ch); };
 };
 */
+enum PHYCFGR{
+	RST_PHY		=  0x80,
+	OPMODE		=  0x40,
+	DPX			  =  0x04,
+	SPD			  =  0x02,
+	LINK		  =  0x01,
+};
 
 class SnMR {
 public:
@@ -149,7 +157,7 @@ class W5500Class {
 
 public:
   void init();
-
+  void init(GPIO* resetGpio);
   /**
    * @brief	This function is being used for copy the data form Receive buffer of the chip to application buffer.
    * 
