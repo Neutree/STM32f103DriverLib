@@ -1,5 +1,6 @@
 #include "utility/w5500.h"
 #include "utility/socket.h"
+#include "utility/util.h"
 
 extern "C" {
   #include "string.h"
@@ -9,7 +10,7 @@ extern "C" {
 
 #include "Ethernet_STM.h"
 #include "EthernetClient.h"
-#include "EthernetServer.h"
+//#include "EthernetServer.h"
 #include "Dns.h"
 
 uint16_t EthernetClient::_srcport = 1024;
@@ -166,3 +167,29 @@ EthernetClient::operator bool() {
 bool EthernetClient::operator==(const EthernetClient& rhs) {
   return _sock == rhs._sock && _sock != MAX_SOCK_NUM && rhs._sock != MAX_SOCK_NUM;
 }
+
+int EthernetClient::println(const char* str)
+{
+  int n;
+  n = write((const uint8_t*)str,strlen(str));
+  n += write((const uint8_t*)"\r\n",2);
+  return n;
+}
+
+int EthernetClient::println()
+{
+  int n;
+  n += write((const uint8_t*)"\r\n",2);
+  return n;
+}
+
+
+int EthernetClient::print(const char* str)
+{
+  int n;
+  n = write((const uint8_t*)str,strlen(str));
+  return n;
+}
+
+
+

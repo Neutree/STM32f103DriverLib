@@ -485,6 +485,11 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\..\lib\offchip\Ethernet\src\Ethernet_STM.cpp</FilePath>
             </File>
+            <File>
+              <FileName>EthernetClient.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\..\lib\offchip\Ethernet\src\EthernetClient.cpp</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

@@ -4,14 +4,16 @@
 #include "w5500.h"
 #include "Dhcp.h"
 #include "IPAddress.h"
+#include "Ethernet_STM.h"
+#include "EthernetClient.h"
 
-USART log(1,115200,false,0,3,7,1,3);//
+USART log(3,115200,false,0,3,7,1,3);//
 uint8_t dataSend[9]={"abcdefg\n"};
 u8 hexData[5]={0x12,0x56,0x9A,0xAB,0xEF};
 u8 dataReceived[50];
 
 uint8_t sock = 0;
-uint8_t mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEF};
+uint8_t mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xEC};
 uint8_t local_ip[] = {192,168,31,236};
 uint8_t gateway_ip[] = {192,168,31,1};
 uint8_t configSubnetMask[] = {255,255,255,0};
@@ -98,7 +100,7 @@ int main()
 }
 
 */
-
+/*
 DhcpClass dhcp;
 IPAddress dnsServerAddress;
 
@@ -189,4 +191,67 @@ int main()
 	}
 	
 }
+*/
+
+
+IPAddress localIp(192,168,21,236);
+char serverAddr[] = "www.example.com"; 
+
+EthernetClient client;
+
+int main()
+{
+	log<<"system start, initilize now\n";
+
+	log<<"Init ethernet...\n";
+	 // start the Ethernet connection:
+#if defined(WIZ550io_WITH_MACADDRESS)
+	if (Ethernet.begin() == 0) {
+#else
+	if (Ethernet.begin(mac) == 0) {//dhcp fail
+#endif  
+    log<<"Failed to configure Ethernet using DHCP\n";
+    // no point in carrying on, so do nothing forevermore:
+    // try to congifure using IP address instead of DHCP:
+#if defined(WIZ550io_WITH_MACADDRESS)
+    Ethernet.begin(ip);
+#else
+    Ethernet.begin(mac, localIp);
+#endif  
+  }
+	TaskManager::DelayS(1);
+	log<<"connecting server...\n";
+	  // if you get a connection, report back via serial:
+	if (client.connect(serverAddr, 80)) {
+		log<<"connected\n";
+		// Make an HTTP request:
+		client.println("GET / HTTP/1.1");
+		client.println("Host: www.example.com");
+		client.println("Connection: close");
+		client.println();
+	} 
+	else {
+		// if you didn't get a connection to the server:
+		log<<"connection failed";
+	}
+	while(1)
+	{
+		// if there are incoming bytes available 
+		// from the server, read them and print them:
+		if (client.available()) {
+			char c = client.read();
+			log<<c;
+		}
+
+		// if the server's disconnected, stop the client:
+		if (!client.connected()) {
+			log<<"\ndisconnecting.\n";
+			client.stop();
+			log<<"disconnected\n";
+			while(1);
+		}
+	}
+}
+
+
 

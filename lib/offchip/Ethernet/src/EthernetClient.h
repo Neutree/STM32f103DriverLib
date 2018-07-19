@@ -30,10 +30,18 @@ public:
   friend class EthernetServer;
   
 //  using Print::write;
+  int println(const char* str);
+  int println();
+  int print(const char* str);
+  int getWriteError() { return write_error; }
+  
+protected:
+  void setWriteError(int err = 1) { write_error = err; }
 
 private:
   static uint16_t _srcport;
   uint8_t _sock;
+  int write_error;
 };
 
 #endif
