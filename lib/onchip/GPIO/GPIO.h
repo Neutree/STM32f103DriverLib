@@ -48,7 +48,7 @@ class GPIO
 	 
 		/**
       * @brief disable jtag or sw if you want to use the io below:
-      * PB3:JTDO, PB4:JNTRST, PA15:JTDI,  PA13:JTCK/SWCLK, PA14:JTMS/SWDIO
+      * PB3:JTDO, PB4:JNTRST, PA15:JTDI,  PA14:JTCK/SWCLK, PA13:JTMS/SWDIO
       */
 		void DisableSWJTAG(bool disableSW,bool disableJtag);
 		/**
