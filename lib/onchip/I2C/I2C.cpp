@@ -99,8 +99,8 @@ bool I2C::AddCommand(u8 slaveAddr,u8 register_addr, u8* data_write, u8 sendNum,u
 		IIC_CMD_Temp.inDataLen=0;
 		IIC_CMD_Temp.outDataLen=sendNum;
 		IIC_CMD_Temp.pDataIn=0;
-		for(i=0;i<sendNum;++i)
-			IIC_CMD_Temp.DataOut[i]=(*data_write)++;
+		for(i=0;i<sendNum;++i,++data_write)
+			IIC_CMD_Temp.DataOut[i]=*data_write;
 		IIC_CMD_Temp.slaveAddr=slaveAddr;
 	}
 	else                //
@@ -144,6 +144,59 @@ bool I2C::AddCommand(u8 slaveAddr,u8 register_addr, u8* data_write, u8 sendNum,u
 	mCmdQueue.Put(IIC_CMD_Temp);//将命令加入队列
 	return true;
 }
+
+bool I2C::AddCommandWrite(u8 slaveAddr, u8* data_write, u8 sendNum,bool isRecordInterval,Sensor* pDevice)
+{
+	I2C_Command_Struct IIC_CMD_Temp;	
+	u8 i;	
+	if(sendNum>=1)//发送模式
+	{
+		if(sendNum==1)
+			IIC_CMD_Temp.cmdType=I2C_WRITE_BYTE;
+		else
+			IIC_CMD_Temp.cmdType=I2C_WRITE_BYTES;
+		IIC_CMD_Temp.inDataLen=0;
+		IIC_CMD_Temp.outDataLen=sendNum;
+		IIC_CMD_Temp.pDataIn=0;
+		for(i=0;i<sendNum;++i)
+		{
+			IIC_CMD_Temp.DataOut[i]=(*data_write);
+			++data_write;
+		}
+		IIC_CMD_Temp.slaveAddr=slaveAddr;
+	}
+	IIC_CMD_Temp.isRecordInterval = isRecordInterval;//是否记录两次执行该命令的间隔时间
+	IIC_CMD_Temp.pDevice = pDevice;
+	mCmdQueue.Put(IIC_CMD_Temp);//将命令加入队列
+	return true;
+}
+
+bool I2C::AddCommandRead(u8 slaveAddr, u8* data_write, u8 sendNum,u8* data_read, u8 receiveNum,bool isRecordInterval,Sensor* pDevice)
+{
+	I2C_Command_Struct IIC_CMD_Temp;	
+	u8 i;	
+	if(receiveNum>1)//接收多个字节
+	{
+		IIC_CMD_Temp.cmdType=I2C_READ_BYTES;
+	}
+	else if(receiveNum==1)//接收一个字节
+	{
+		IIC_CMD_Temp.cmdType=I2C_READ_BYTE;
+	}
+	IIC_CMD_Temp.inDataLen=receiveNum;
+	IIC_CMD_Temp.outDataLen=sendNum;
+	IIC_CMD_Temp.pDataIn=data_read;
+	for(i=0;i<sendNum;++i,++data_write)
+	{
+		IIC_CMD_Temp.DataOut[i]=(*data_write);
+	}
+	IIC_CMD_Temp.slaveAddr=slaveAddr<<1;
+	IIC_CMD_Temp.isRecordInterval = isRecordInterval;//是否记录两次执行该命令的间隔时间
+	IIC_CMD_Temp.pDevice = pDevice;
+	mCmdQueue.Put(IIC_CMD_Temp);//将命令加入队列
+	return true;
+}
+
 
 u8 I2C::StartCMDQueue(/*uint32_t timeOutMaxTime*/)
 {	
@@ -227,6 +280,7 @@ void I2C::EventIRQ()
 			#endif
 				I2C_Send7bitAddress(mI2C,mCurrentCmd.slaveAddr,I2C_Direction_Transmitter);
 				mState = STATE_SEND_DATA;//状态设置为需要发送数据（发送寄存器地址）
+				LOG("1 send addr+w\n");
 			#ifdef I2C_USE_DMA
 				if(mUseDma)
 				{
@@ -253,6 +307,7 @@ void I2C::EventIRQ()
 			{
 				I2C_Send7bitAddress(mI2C,mCurrentCmd.slaveAddr,I2C_Direction_Receiver);
 				mState = STATE_REVEIVE_DATA;//状态设置为需要发送数据（发送寄存器地址）
+				LOG("5 send addr+r\n");
 			#ifdef I2C_USE_DMA
 				if(mUseDma)
 				{
@@ -295,6 +350,7 @@ void I2C::EventIRQ()
 				I2C_SendData(mI2C,mCurrentCmd.DataOut[0]);//发送寄存器地址或者命令
 				++mIndex_Send;//发送计数下标后移
 				--mCurrentCmd.outDataLen;//需要发送的数据长度减1
+				LOG("2 send data0\n");
 			}
 			#endif
 			break;
@@ -306,6 +362,7 @@ void I2C::EventIRQ()
 				I2C_AcknowledgeConfig(mI2C,DISABLE);//关应答
 				I2C_GenerateSTOP(mI2C,ENABLE);//产生停止信号
 			}
+			LOG("6 addr+r sent\n");
 			break;
 		
 		
@@ -343,6 +400,7 @@ void I2C::EventIRQ()
 			}
 			else
 			{
+					LOG("7 rcv\n");
 					(*mCurrentCmd.pDataIn) = I2C_ReceiveData(mI2C);
 					++mCurrentCmd.pDataIn;//下标后移
 					--mCurrentCmd.inDataLen;//需要接收数据计数减一
@@ -367,6 +425,7 @@ void I2C::EventIRQ()
 							}
 							else//队列为空，
 							{
+								LOG("8 end\n");
 								mState=STATE_READY;//将状态设置为 准备好发送 模式
 							}
 					}
@@ -454,6 +513,7 @@ void I2C::EventIRQ()
 				{
 					I2C_SendData(mI2C,mCurrentCmd.DataOut[mIndex_Send++]);//发送寄存器地址或者命令
 					--mCurrentCmd.outDataLen;//需要发送的数据长度减1
+					LOG("3 send data1\n");
 				}
 				else//数据已经发送完成
 				{
@@ -483,6 +543,7 @@ void I2C::EventIRQ()
 						{
 								mState = STATE_SEND_ADR;//状态设置为 发送从机地址+读 
 								I2C_GenerateSTART(mI2C,ENABLE);//起始信号
+							LOG("4 rcv start\n");
 						}
 				}
 			}
@@ -605,7 +666,7 @@ void I2C::ErrorIRQ()
 	if((Error&I2C_ERR_AF)!=0)
     {
 		#ifdef DEBUG
-			LOG("AF\n");
+			LOG("Ack Fail\n");
 		#endif
 		  /* No I2C software reset is performed here in order to allow user to recover 
 		  communication */ 
@@ -687,9 +748,12 @@ I2C::I2C(u8 i2cNumber,bool useDMA,u32 speed,u8 remap,u8 priorityGroup,
 					uint8_t preemprionPriorityError,uint8_t subPriorityError,
 					uint8_t preemprionPriorityDma,uint8_t subPriorityDma)
 {
-#ifdef USE_I2C
+#ifndef USE_I2C
+#error "NO I2C enabled in Configuration.h"	
+#else
 #ifndef USE_I2C1
 #ifndef USE_I2C2
+#error "NO I2C enabled in Configuration.h"
  return;
 #endif	
 #endif
