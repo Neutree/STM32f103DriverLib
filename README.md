@@ -3,7 +3,8 @@
 
 To make program on STM32 more easier, we packet every peripheral and module as a C++ class, mask operation steps instead of function-oriented interface.
 
-> eg: How to use USART to send data
+**e.g. How to use USART to send data**
+
 ```cpp
 # include "USART.h"
 USART com(1,115200);
@@ -13,52 +14,80 @@ void main()
 }
 ```
 
-_ _ _
-# Chat On Gitter
-[![Gitter](https://badges.gitter.im/Neutree/STM32f103DriverLib.svg)](https://gitter.im/STM32f103DriverLib/Lobby)
-_ _ _
-# 如何使用
 
-1. windows上安装keil MDK 5
-2. 克隆(推荐)或者下载项目到本地目录,复制一个副本
+**e.g. Use temperature and humidity sensor**
+
+```cpp
+#include "I2C.h"
+#include "Si7021.h"
+#include "USART.h"
+#include "TaskManager.h"
+
+USART log(1,115200);
+I2C i2c1(1);
+Si7021 tempHumi;
+
+int main()
+{
+  tempHumi.Init(&i2c1);
+  while(1)
+  {
+    tempHumi.Update();
+
+    log<<"temperature:"<<tempHumi.GetTemperature()<<"\n";
+    log<<"humidity:"<<tempHumi.GetHumidity()<<"\n";
+
+    TaskManager::DelayMs(100);
+  }
+}
+```
+
+---------------------
+# How to use
+
+1. Install keil MDK 5 on windows
+2. clone or download this project to your PC
 ```
 git clone https://github.com/Neutree/STM32f103DriverLib.git
 ```
-3. 打开/template文件夹，该文件夹下面会有相应IDE的工程模板，直接打开运行即可（onchip表示只有STM32片上驱动，offchip表示有一些常用模块的驱动）
-4. 需要关心的文件主要在工程的app文件夹下，有三个文件，Main.cpp,Configuration.h,UserInterrupt.cpp.分别为主函数所在、配置使用哪些资源，中断用户程序。
-  * 首先检查Configuration.h中需要使用的资源是否取消注释了，不需要使用的资源是否注释了
-  * 然后看Main.cpp中硬件定义及其参数,每个外设驱动都有一个文件，具体每个外设驱动的使用请看其头文件。
+3. open example project in `example` folder with MDK5, compile and download to your board and run
+4. There's three files you should pay attention: `Main.cpp`,`Configuration.h`,`UserInterrupt.cpp`, code your code and config configuration.
+  * Uncomment what you need in `Configuration.h`
+  * And every one driver have one folder, you should see the header file before you start code, there's some attention and doc in the header file.
 
-# 规范
-## 文件编码格式
-UTF-8 without signature
+# Convention
+
+## File encode format
+
+select **UTF-8 without signature** before you start code
+
 > keil->edit->configuration->editor->encoding
  
-## 目录规范
+## Folders
 
-`lib`：驱动库目录
-> `lib/math/`:外设会用到的算法库
+`lib`：driver lib
+> `lib/math/`: math lib
 
-> `lib/onchip/`:片上外设驱动
->> `lib/onchip/驱动名`:驱动接口的定义和对驱动的实现
+> `lib/onchip/`: driver releated to stm32
+>> `lib/onchip/driverName`: driver source code folder
 
 
-> `lib/offchip/`:片外模块驱动
+> `lib/offchip/`: module driver not belong to stm32
 
->> `lib/offchip/驱动名`:驱动接口的定义和对驱动的实现
+>> `lib/offchip/driverName`: driver source code folder
 
-`example`:驱动库demo，每个驱动一个文件夹,每个芯片一个文件夹
-> `example/onchip/驱动名`：具体某个芯片的模块驱动
+`example`: driver demo
+> `example/onchip/driverName`：example related to stm32
 
-> `example/offchip/驱动名`：具体某个外围模块驱动
+> `example/offchip/driverName`：module example not belong to stm32
 
-`template`：工程模板，每个IDE或者编译器一个文件夹，下面有特定芯片型号文件夹
+`template`：project template
 
-`tool`:工具，如删除工程中间文件批处理文件
+`tool`: tools
 
-# 驱动简介
+# Driver Brief
 
-## 片上外设驱动
+## On chip
 * **Interrupt**：片上外设中断管理，所有的中断相关的逻辑都在这里
 * **GPIO**：通用IO驱动，包括基本IO配置与设置引脚和读取引脚状态
 * **USART**：串口驱动，包括了串口1到串口4的驱动，发送可使用DMA，接收使用中断方式，每个串口使用单独的FIFO
@@ -69,9 +98,12 @@ UTF-8 without signature
 * **TaskManager**：使用systick作为时基，可用来获取系统时间戳、延时（包含软件延时）和定时调用函数
 * **Capture**：输入捕获，包括了定时器捕获和外部中断捕获
 * **Flash**：STM32内部Flash相关操作，包括对Flash的读写
+* **CAN**
+* **SPI**
+* **IWDG**
 
 
-## 片外模块驱动
+## Module Driver
 * **LED**：基于GPIO和PWM对LED的相关操作，包括开、关、闪烁等
 * **esp8266**：esp8266是串口WIFI模块，基于USART对esp8266的相关操作，其中包括了驱动文件（esp8266.cpp）和应用层文件(SockeEsp8266.cpp),应用层文件是使用socket的接口进行通信的实现
 * **GPS**：使用USART对GPS模块的驱动
@@ -80,11 +112,30 @@ UTF-8 without signature
 * **MPU6050**：6轴惯导驱动，包括了角速度、加速度的读取
 * **RemoteControl**:RC遥控器驱动，包含了PWM输入捕获和PPM输入捕获，包括了中断方式和定时器输入捕获方式
 * **~~Ultrasonic~~** ~~：超声波驱动，包括了systick版本和定时器版本~~
+* **HMI**
+* **Si7021**: Temperature and humidity sensor
+* **PN53x**: RFID/NFC reader
+* **Relay**
+* **SPI Flash**
+* **Ethernet**: W5500 ethernet communication
+* **GNSS**: GNSS NMEA parser (GPS)
+* **ZPH01**
+* **SHARP_1014_PM2.5**
+* **MFRC522**
+* **MG996R**
+* **MZH14**
+* **yishan_PM2.5**
+* **Door**: Reed Switch
+* **HCHO**
+* **Joystick**
 
-## 代码风格
-看[这里](https://github.com/neutree/simple-code-conventions)
 
-# 贡献者
+
+## Code Style
+Refer [Here](https://github.com/neutree/simple-code-conventions)
+
+# Contributors
+
 [AllenWang](https://github.com/afshare)
 
 Danyuanhong
