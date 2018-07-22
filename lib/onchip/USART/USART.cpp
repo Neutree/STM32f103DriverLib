@@ -123,17 +123,21 @@ USART::USART(u8 USART,uint32_t baud,bool useDMA,u8 remap,u8 Prioritygroup,uint8_
 				,uint16_t parity,uint16_t wordLength, uint16_t stopBits)
 	:isBusySend(0),mUseDma(useDMA),mPrecision(3)
 {	
-	#ifdef USE_USART
+	#ifndef USE_USART
+	#error "No USART enabled in Configuration.h"
+	#else
 	#ifndef USE_USART1
 	#ifndef USE_USART2
 	#ifndef USE_USART3
 	#ifdef STM32F10X_HD//大容量
 	#ifndef USE_USART4//一个串口都没用
+	#error "No USART enabled in Configuration.h"
 		return;
+	#endif
 	#endif
 	#ifdef STM32F10X_MD//中容量，一个串口都没用
+	#error "No USART enabled in Configuration.h"
 		return;
-	#endif
 	#endif
 	#endif
 	#endif
