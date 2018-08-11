@@ -293,3 +293,8 @@ bool flash::Clear(uint16_t pageNumber)
 		FLASH_Lock();
 	return true;
 }
+
+bool flash::IsHalfWord()
+{
+	return mUseHalfWord;
+}

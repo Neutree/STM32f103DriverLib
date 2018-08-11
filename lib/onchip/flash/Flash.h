@@ -82,6 +82,8 @@ bool Write(uint16_t pageNumber,u16 position,char* str);
 bool Read(uint16_t pageNumber,u16 position,char *str);
 bool Clear(uint16_t pageNumber);
 
+bool IsHalfWord();
+
 };
 
 

@@ -21,6 +21,7 @@
 #include "FIFOBuffer.h"
 #include "GPIO.h"
 #include "string.h"
+#include "Configuration.h"
 
 
 
@@ -30,10 +31,16 @@
   */
 /******************************************************************************************************/
 							/****configuration，使用前请自行配置****/
+#ifndef USART_TX_BUFFER_SIZE
 		#define USART_TX_BUFFER_SIZE     256              //USART BUFFER FIFO SIZE
+#endif
+#ifndef USART_RX_BUFFER_SIZE
 		#define USART_RX_BUFFER_SIZE     256              //USART BUFFER FIFO SIZE
+#endif
+#ifndef USART_DMA_TX_BUFFER_SIZE
 		#define USART_DMA_TX_BUFFER_SIZE 20             //USART DMA BUFFER SIZE
-		
+#endif
+
 /*******************************************************************************************************/
 
 /**
