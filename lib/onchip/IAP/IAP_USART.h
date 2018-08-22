@@ -32,14 +32,16 @@ typedef enum{
     IAP_USART_UPGRADE_STATUS_MAX
 }IAP_USART_Upgrade_Status_t;
 
+#pragma pack(1)
 typedef struct
 {
     uint32_t packStart;
+	uint16_t packTotal;
     uint16_t packID;
-    uint16_t packTotal;
     bool     success;
     uint16_t checkSum;
 }IAP_USART_Pack_Ack_t;
+#pragma pack()
 
 
 
@@ -47,7 +49,7 @@ typedef struct
 class IAP_USART:public IAP{
 
 public:
-    IAP_USART(USART& usart);
+    IAP_USART(USART& usart,Flash& flash,uint32_t appAddr);
     IAP_USART_Upgrade_Status_t Upgrade();
 
 private:
@@ -56,6 +58,8 @@ private:
     IAP_USART_Pack_t mPack;
     IAP_USART_Pack_Ack_t mPackAck;
     bool CheckPack(IAP_USART_Pack_t* pack);
+	bool PackAck(uint16_t packID, uint16_t packTotal, bool success);
+	bool AckCheckSum(IAP_USART_Pack_Ack_t* pack);
 
 };
 

@@ -32,7 +32,7 @@
 
 
 
-class flash
+class Flash
 {
 private:
 	
@@ -44,7 +44,7 @@ public:
 ///@param startAddress 存储数据的开始位置 默认：0x08010000 即63k byte 处
 ///@param useHalfWord 单个数据储存的长度 true:16位 false:32位  默认：16位
 ///////////////////
-flash(uint32_t startAddress=(0x08000000+63*MEMORY_PAGE_SIZE),bool useHalfWord=true);
+Flash(uint32_t startAddress=(0x08000000+63*MEMORY_PAGE_SIZE),bool useHalfWord=true);
 
 
 ///////////////////////

@@ -1,5 +1,6 @@
 
 #include "IAP.h"
+#include "stm32f10x.h"
 
 IAP::IAP(Flash& flash,uint32_t appAddr )
 :mFlash(flash)
@@ -13,7 +14,7 @@ bool IAP::LoadApp()
     void (*pFun)(void);
 
     RCC_DeInit();    //关闭外设时钟
-    NVIC_DeInit ();  //恢复NVIC为复位状态.使中断不再发生.
+    //NVIC_DeInit();  //恢复NVIC为复位状态.使中断不再发生.
     __disable_irq();
 
 	if(((*(uint32_t*)mAppAddr)&0x2FFE0000)==0x20000000)	//检查栈顶地址是否合法.
@@ -44,9 +45,6 @@ bool IAP::CheckPack(IAP_Pack_t* pack)
 
 bool IAP::WritePack(IAP_Pack_t* pack, bool checkPack)
 {
-    uint16_t i=0;
-    uint16_t temp;
-
     if(checkPack && !CheckPack(pack))
         return false;
     if(mFlash.IsHalfWord())
@@ -54,7 +52,7 @@ bool IAP::WritePack(IAP_Pack_t* pack, bool checkPack)
         if(pack->len % 2)
             return false;
         uint16_t packLen = pack->len/2;
-        if(!mFlash.Write(pack->id,(uint16_t*)(pack->data),packLen))
+        if(!mFlash.Write(pack->id,0,(uint16_t*)(pack->data),packLen))
             return false;
     }
     else

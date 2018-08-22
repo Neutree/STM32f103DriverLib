@@ -1,7 +1,7 @@
 #include "IAP_USART.h"
 
-IAP_USART::IAP_USART(USART& usart)
-:mUsart(usart)
+IAP_USART::IAP_USART(USART& usart,Flash& flash,uint32_t appAddr)
+:IAP(flash,appAddr),mUsart(usart)
 {
     mPackIdLast = 0;
 }
@@ -18,6 +18,7 @@ IAP_USART_Upgrade_Status_t IAP_USART::Upgrade()
     {
         if(headerReadLen == 4)//find header
         {
+			headerReadLen = 0;
             mPack.packStart = startFlag;
             mUsart.GetReceivedData(((uint8_t*)&mPack)+4,sizeof(IAP_USART_Pack_t)-4);
             if(!CheckPack(&mPack))
@@ -29,7 +30,7 @@ IAP_USART_Upgrade_Status_t IAP_USART::Upgrade()
                     return IAP_USART_UPGRADE_STATUS_ERROR;
                 }
             }
-            if(mPack.packID == mPackIdLast+1)//received the next pack
+            if((mPack.packID == 0) || (mPack.packID == mPackIdLast+1))//received the next pack
             {
                 if(!WritePack( (IAP_Pack_t*)&mPack.packID, false))
                 {
@@ -65,7 +66,7 @@ IAP_USART_Upgrade_Status_t IAP_USART::Upgrade()
             break;
         }
         mUsart.GetReceivedData(&temp,1);
-        if( temp == ((uint8_t*)startFlag)[headerReadLen] )
+        if( temp == ((uint8_t*)&startFlag)[headerReadLen] )
         {
             ++headerReadLen;
         }
@@ -85,13 +86,48 @@ IAP_USART_Upgrade_Status_t IAP_USART::Upgrade()
 bool IAP_USART::CheckPack(IAP_USART_Pack_t* pack)
 {
     uint16_t i;
-    uint16_t packLen = sizeof(IAP_Pack_t)/2-1;
+    uint16_t packLen = sizeof(IAP_USART_Pack_t)/2-1;
     uint16_t sum = *((uint16_t*)pack);
     for(i=1; i<packLen; ++i)
     {
         sum ^= ((uint16_t*)pack)[i];
     }
+	if(sizeof(IAP_USART_Pack_t)%2)
+	{
+		sum ^= ((uint16_t*)pack)[sizeof(IAP_USART_Pack_t)-3];
+	}
     return sum == pack->checkSum;
 }
+
+bool IAP_USART::AckCheckSum(IAP_USART_Pack_Ack_t* pack)
+{
+    uint16_t i;
+    uint16_t packLen = sizeof(IAP_USART_Pack_Ack_t)/2-1;
+    uint16_t sum = *((uint16_t*)pack);
+    for(i=1; i<packLen; ++i)
+    {
+        sum ^= ((uint16_t*)pack)[i];
+    }
+	if(sizeof(IAP_USART_Pack_Ack_t)%2)
+	{
+		sum ^= ((uint8_t*)pack)[(sizeof(IAP_USART_Pack_Ack_t)-3)];
+	}
+	pack->checkSum = sum;
+    return true;
+}
+
+bool IAP_USART::PackAck(uint16_t packID, uint16_t packTotal, bool success)
+{
+	IAP_USART_Pack_Ack_t ack;
+	ack.packStart = IAP_USART_PACK_ACK_START_FLAG;
+	ack.packID = packID;
+	ack.packTotal = packTotal;
+	ack.success = success;
+	AckCheckSum(&ack);
+	mUsart.SendData((uint8_t*)&ack,sizeof(IAP_USART_Pack_Ack_t));
+	return true;
+}
+
+
 
 

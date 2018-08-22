@@ -1,7 +1,7 @@
-#include "flash.h"
+#include "Flash.h"
 
 
-flash::flash(uint32_t startAddress,bool useHalfWord)
+Flash::Flash(uint32_t startAddress,bool useHalfWord)
 {
 	if(startAddress%MEMORY_PAGE_SIZE !=0)//不是页的开始,将开始处设置为下一个页开始的地方
 		startAddress+=(MEMORY_PAGE_SIZE-(startAddress%MEMORY_PAGE_SIZE));
@@ -17,7 +17,7 @@ flash::flash(uint32_t startAddress,bool useHalfWord)
 ///@param -Data 读出的数据存放的地址
 ///@retval -1 : 读取成功 -0：读取失败
 ///////////////////////
-bool flash::Read(u16 pageNumber,u16 position,u16* data,u16 length)
+bool Flash::Read(u16 pageNumber,u16 position,u16* data,u16 length)
 {
 	u16 dataLength=length;
 	if(mUseHalfWord)
@@ -46,7 +46,7 @@ bool flash::Read(u16 pageNumber,u16 position,u16* data,u16 length)
 ///@param -Data 读出的数据存放的地址
 ///@retval -1 : 读取成功 -0：读取失败
 ///////////////////////
-bool flash::Read(uint16_t pageNumber, uint32_t* data,u16 length)
+bool Flash::Read(uint16_t pageNumber, uint32_t* data,u16 length)
 {
 	u16 dataLength=length;
 	if(mUseHalfWord)
@@ -78,7 +78,7 @@ bool flash::Read(uint16_t pageNumber, uint32_t* data,u16 length)
 ///@attention 如果构造构造函数的参数useHalfWord为true时，会现将其转换为u16再储存，否则会转换成u32再储存
 ///@retval -1 : 写入成功 -0：写入失败
 ///////////////////////
-bool flash::Write(uint16_t pageNumber, uint8_t* data,u16 length)
+bool Flash::Write(uint16_t pageNumber, uint8_t* data,u16 length)
 {
 	u16 dataLength=length;
 	FLASH_Unlock();
@@ -119,7 +119,7 @@ bool flash::Write(uint16_t pageNumber, uint8_t* data,u16 length)
 ///@param -Data 将要写入的数据
 ///@retval -1 : 写入成功 -0：写入失败
 ////
-bool flash::Write(uint16_t pageNumber,u16 position,uint16_t* data,u16 length)
+bool Flash::Write(uint16_t pageNumber,u16 position,uint16_t* data,u16 length)
 {
 	if(position+length>MEMORY_PAGE_SIZE)
 		return false;
@@ -166,7 +166,7 @@ bool flash::Write(uint16_t pageNumber,u16 position,uint16_t* data,u16 length)
 ///@attention 如果初始化时选择的是使用办字节，则会将参数强制转换成u16型数据然后再进行储存，可能会出现数据的丢失
 ///@retval -1 : 写入成功 -0：写入失败
 ///////////////////////
-bool flash::Write(uint16_t pageNumber, uint32_t* data,u16 length)
+bool Flash::Write(uint16_t pageNumber, uint32_t* data,u16 length)
 {
 	u16 dataLength=length;
 	FLASH_Unlock();	FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|
@@ -199,7 +199,7 @@ bool flash::Write(uint16_t pageNumber, uint32_t* data,u16 length)
 
 
 //字符串的保存方式为（字长+字符串）
-bool flash::Write(uint16_t pageNumber,u16 position,char* str)
+bool Flash::Write(uint16_t pageNumber,u16 position,char* str)
 {
 	u16 number=0;
 	u32 Lenth=0;
@@ -245,7 +245,7 @@ bool flash::Write(uint16_t pageNumber,u16 position,char* str)
 
 
 //字符串读取
-bool  flash::Read(uint16_t pageNumber,u16 position,char *str)
+bool  Flash::Read(uint16_t pageNumber,u16 position,char *str)
 {
 	u16 number=0;
 	u32 Lenth=0;
@@ -283,7 +283,7 @@ bool  flash::Read(uint16_t pageNumber,u16 position,char *str)
 }
 
 //擦除
-bool flash::Clear(uint16_t pageNumber)
+bool Flash::Clear(uint16_t pageNumber)
 {
 	FLASH_Unlock();
 		FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|
@@ -294,7 +294,7 @@ bool flash::Clear(uint16_t pageNumber)
 	return true;
 }
 
-bool flash::IsHalfWord()
+bool Flash::IsHalfWord()
 {
 	return mUseHalfWord;
 }
