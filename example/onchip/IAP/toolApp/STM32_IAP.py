@@ -195,7 +195,7 @@ for i in range(totalLen):
     ackWish.success = 1
     ackWish.checkSum = ackWish.calcCheckSum()
     print("send pack",pack.packID,"total:",pack.packTotal)
-    rcvStr,result=WriteCOM(com,transBytes,ackWish.toBytes(),10)
+    rcvStr,result=WriteCOM(com,transBytes,ackWish.toBytes(),3)
     if not result:
         print("wait ack fail! ")
         print("wish:    ",list(ackWish.toBytes()))

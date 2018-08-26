@@ -2,7 +2,7 @@
 #include "IAP.h"
 #include "stm32f10x.h"
 
-IAP::IAP(Flash& flash,uint32_t appAddr )
+IAP::IAP(Flash* flash,uint32_t appAddr )
 :mFlash(flash)
 {
     mAppAddr = appAddr;
@@ -30,6 +30,17 @@ bool IAP::LoadApp()
 	}
 }
 
+/**
+  *
+  *@param appAdress App adress, this value **must** be a multiple 
+  *         of 0x200. 
+  */
+void IAP::Init(uint32_t currAppAdress)
+{
+	NVIC_SetVectorTable(NVIC_VectTab_FLASH, currAppAdress);
+	__enable_irq();
+}
+
 
 bool IAP::CheckPack(IAP_Pack_t* pack)
 {
@@ -47,12 +58,12 @@ bool IAP::WritePack(IAP_Pack_t* pack, bool checkPack)
 {
     if(checkPack && !CheckPack(pack))
         return false;
-    if(mFlash.IsHalfWord())
+    if(mFlash->IsHalfWord())
     {
         if(pack->len % 2)
             return false;
         uint16_t packLen = pack->len/2;
-        if(!mFlash.Write(pack->id,0,(uint16_t*)(pack->data),packLen))
+        if(!mFlash->Write(pack->id,0,(uint16_t*)(pack->data),packLen))
             return false;
     }
     else
@@ -60,7 +71,7 @@ bool IAP::WritePack(IAP_Pack_t* pack, bool checkPack)
         if(pack->len % 4)
             return false;
         uint16_t packLen = pack->len/4;
-        if(!mFlash.Write(pack->id,(uint32_t*)(pack->data),packLen))
+        if(!mFlash->Write(pack->id,(uint32_t*)(pack->data),packLen))
             return false;
     }
     return true;

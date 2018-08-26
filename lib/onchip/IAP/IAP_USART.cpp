@@ -1,7 +1,7 @@
 #include "IAP_USART.h"
 
 IAP_USART::IAP_USART(USART& usart,Flash& flash,uint32_t appAddr)
-:IAP(flash,appAddr),mUsart(usart)
+:IAP(&flash,appAddr),mUsart(usart)
 {
     mPackIdLast = 0;
 }
@@ -47,6 +47,9 @@ IAP_USART_Upgrade_Status_t IAP_USART::Upgrade()
                     {
                         mPackIdLast = 0;
                         PackAck(mPack.packID,mPack.packTotal,true);
+						while(mUsart.SendBufferSize()>0);
+						volatile uint32_t tmpCount = 10000;
+						while(--tmpCount>0){};						
                         // LoadApp();// upgrade complete, start app now
                         return IAP_USART_UPGRADE_STATUS_COMPLETE;
                     }

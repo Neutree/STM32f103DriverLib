@@ -93,24 +93,26 @@
 #include "USART.h"
 #endif
 
-#ifdef USE_I2C
-#include "I2C.h"
-#endif
+//#ifdef USE_I2C
+//#include "I2C.h"
+//#endif
 
-#ifdef USE_CAPTURE_TIM
-#include "InputCapture_TIM.h"
-#endif
+//#ifdef USE_CAPTURE_TIM
+//#include "InputCapture_TIM.h"
+//#endif
 
-#ifdef USE_CAPTURE_EXIT
-#include "InputCapture_EXIT.h"
-#endif
+//#ifdef USE_CAPTURE_EXIT
+//#include "InputCapture_EXIT.h"
+//#endif
 
-#ifdef USE_TIMER
-#include "Timer.h"
-#endif
+//#ifdef USE_TIMER
+//#include "Timer.h"
+//#endif
 
-#ifdef USE_ULTRASONIC
-#include "Ultrasonic.h"
-#endif
+//#ifdef USE_ULTRASONIC
+//#include "Ultrasonic.h"
+//#endif
+
+
 #endif
 
